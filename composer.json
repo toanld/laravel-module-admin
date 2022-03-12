@@ -9,7 +9,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Hungnm\\LaravelModuleAdmin\\": "src/"
+            "Hungnm28\\LaravelModuleAdmin\\": "src/"
         },
         "files": ["src/Helpers/includes.php"]
     },
@@ -28,5 +28,6 @@
             "name": "HungNM",
             "email": "nguyenmanhhung28@gmail.com"
         }
-    ]
+    ],
+    "minimum-stability": "dev"
 }
