@@ -1,0 +1,78 @@
+<?php
+
+namespace DumMyNamespace\Http\Livewire\Auth\Roles;
+
+use App\Models\Permission;
+use App\Models\Role;
+use Livewire\Component;
+
+class Edit extends Component
+{
+    public $record_id;
+    public $done = 3;
+    public $name = '', $title = '', $permission_ids = [];
+
+    protected function rules()
+    {
+        return [
+            'name' => 'string|unique:roles,name,' . $this->record_id,
+            'title' => 'string',
+
+        ];
+    }
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
+    public function mount()
+    {
+        $data = Role::with("permissions")->findOrFail($this->record_id);
+        $this->name = $data->name;
+        $this->title = $data->title;
+        $this->permission_ids = $data->permissions->pluck("id");
+
+    }
+
+    public function update()
+    {
+        $this->validate();
+        $data = Role::findOrFail($this->record_id);
+        $data->fill([
+            'name' => $this->name,
+            'title' => $this->title,
+        ]);
+        if (!$data->clean) {
+            $data->update();
+        }
+        $listPermission = Permission::find($this->permission_ids)->reduce(function ($rt,$item){
+            if($item->parent_id>0){
+                $rt[$item->parent_id] = $item->parent_id;
+            }
+            $rt[$item->id] = $item->id;
+            return $rt;
+        },[]);
+        $data->resetPermissions(array_values($listPermission));
+
+        session()->flash('success', 'Role successfully updated.');
+        switch ($this->done) {
+            case 0:
+                $this->redirect(route('admin.auth.roles.create'));
+                break;
+            case 1:
+                $this->redirect(route('admin.auth.roles.show', ['record_id' => $data->id]));
+                break;
+            default:
+                $this->redirect(route('admin.auth.roles'));
+        }
+    }
+
+
+    public function render()
+    {
+        $permissions = Permission::with("children")->whereParentId(0)->get();
+        return view('DumMyComponent::livewire.auth.roles.edit',compact("permissions"))
+            ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Roles Edit']);
+    }
+}

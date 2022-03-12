@@ -1,0 +1,57 @@
+<?php
+
+namespace DumMyNamespace;
+
+use DumMyModelClass;
+use Livewire\Component;
+
+class Create extends Component
+{
+
+    public $done=0;
+    public DumMyListFields;
+    protected $rules = [
+        DumMyRules
+    ];
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+    public function removeItem($val,$k){
+        if(isset($this->$val) && isset($this->$val[$k])){
+            unset($this->$val[$k]);
+            $this->$val = array_values($this->$val);
+        }
+    }
+   public function store(){
+        $this->validate();
+        $data = DumMyModelName::create([
+            DumMyFormFields
+        ]);
+        if($data){
+            session()->flash('success', 'DumMyModelName successfully created.');
+            switch ($this->done){
+                case 0:   $this->redirect(route('DumMyRoute.create'));
+                          break;
+                case 1:   $this->redirect(route('DumMyRoute.show',['record_id'=>$data->id]));
+                          break;
+                case 3:   $this->redirect(route('DumMyRoute.edit',['record_id'=>$data->id]));
+                          break;
+                default:  $this->redirect(route('DumMyRoute'));
+            }
+        }
+   }
+
+
+   public function resetForm(){
+       $this->redirect(route('DumMyRoute.create'));
+   }
+
+
+    public function render()
+    {
+
+        return view('admin::livewire.DumMyViewFolder.create')
+            ->layout('admin::layouts.master', ['title' => 'DumMyTitle Create']);
+    }
+}

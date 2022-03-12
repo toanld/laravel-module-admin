@@ -1,0 +1,65 @@
+<?php
+
+namespace DumMyNamespace\Http\Livewire\Auth\Admins;
+
+use App\Models\Role;
+use App\Models\User;
+use Livewire\Component;
+
+class Create extends Component
+{
+
+    public $done = 0;
+    public $record_id , $role_ids = [],$user;
+
+    protected $rules = [
+        'record_id' => 'integer',
+        'role_ids' => 'array',
+
+    ];
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+    public function updatedRecordId(){
+        $this->record_id = intval($this->record_id);
+        if($this->record_id>0){
+            $user = User::with("roles")->find($this->record_id);
+            if($user){
+                $this->user = $user;
+                $this->role_ids = $user->roles->pluck("id");
+            }
+        }
+
+    }
+
+    public function store()
+    {
+        $this->validate();
+        $data = User::findOrFail($this->record_id);
+        $data->update(["is_admin" => 1]);
+        $data->refreshRoleIds($this->role_ids);
+        session()->flash('success', 'User successfully created.');
+        switch ($this->done) {
+            case 0:
+                $this->redirect(route('admin.auth.admins.create'));
+                break;
+            case 1:
+                $this->redirect(route('admin.auth.admins.show', ['record_id' => $data->id]));
+                break;
+            case 3:
+                $this->redirect(route('admin.auth.admins.edit', ['record_id' => $data->id]));
+                break;
+            default:
+                $this->redirect(route('admin.auth.admins'));
+        }
+    }
+
+    public function render()
+    {
+        $roles = Role::get()->pluck("title", "id");
+        return view('DumMyComponent::livewire.auth.admins.create', compact( "roles"))
+            ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Admins Create']);
+    }
+}

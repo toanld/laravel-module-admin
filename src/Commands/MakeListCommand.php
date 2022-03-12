@@ -1,0 +1,118 @@
+<?php
+
+namespace Hungnm28\LaravelModuleAdmin\Commands;
+
+use Hungnm28\LaravelModuleAdmin\Traits\CommandTrait;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+
+class MakeListCommand extends Command
+{
+    use CommandTrait;
+
+    protected $signature = 'lma:make-list {name} {--model=}';
+
+    protected $description = 'Make list';
+
+    public function handle()
+    {
+        $name = $this->argument('name');
+        $name = Str::studly($name);
+        $modelName = $this->option("model");
+        $this->folder = $name;
+        if (!$modelName) {
+            $modelName = Str::singular($name);
+            $modelName = Str::studly($modelName);
+        }
+        $this->model = $modelName;
+
+        $this->generateModel($modelName);
+        $this->generateComponent();
+
+        $this->makeClass();
+        $this->makeView();
+    }
+
+    private function makeClass()
+    {
+        $pathSave = $this->class_path("Listing.php");
+        $stub = $this->getStub('listing-class.stub');
+        $dumpFields = "";
+        $dumToggleField = "";
+        foreach ($this->fields as $f => $v) {
+            $dumpFields .= "'$f'" . ' => true,' . "\r\n\t\t";
+            if ($v->type == 'boolean') {
+                $dumToggleField .= "\"$f\", ";
+            }
+        }
+        $dumToggleField = trim($dumToggleField, ', ');
+        $dumpPermission = $this->getPermissionName();
+        $stub = str_replace([
+            'DumMyNamespace',
+            'DumMyModelClass',
+            'DumMyFields',
+            'DumMyModelName',
+            'DumMyPermission',
+            'DumMyToggleField',
+            'DumMyViewFolder',
+            'DumMyTitle'
+        ], [
+            $this->getNamespace(),
+            "App\Models\\$this->model",
+            $dumpFields,
+            $this->model,
+            $dumpPermission,
+            $dumToggleField,
+            $this->getFonderDot(),
+            Str::headline(Str::replace("/", " ", $this->folder))
+        ], $stub);
+
+
+        return File::put($pathSave, $stub);
+    }
+
+    private function makeView()
+    {
+        $stub = $this->getStub("listing-view.stub");
+        $pathSave = $this->view_path("listing.blade.php");
+        $route = config('lma.module.route') . "." . $this->getFonderDot();
+        $tHead = "";
+        $content = "";
+        foreach ($this->fields as $row) {
+            $tHead .= '@if(data_get($fields,\'' . $row->name . '\'))<th>' . $row->label . '</th> @endif' . "\r\n\t\t\t\t\t";
+            $content .= $this->generateView($row) . "\r\n\t\t\t\t\t";
+        }
+        $stub = str_replace([
+            'DumMyTitle',
+            'DumMyRoute',
+            'DumMyPermission',
+            'DumMyThead',
+            'DumMyContent'
+        ],
+            [
+                Str::headline($this->folder),
+                $route,
+                $this->getPermissionName(),
+                $tHead,
+                $content
+            ], $stub);
+
+        return File::put($pathSave, $stub);
+    }
+
+    protected function generateView($item)
+    {
+        switch ($item->type) {
+            case "boolean":
+                return '@if(data_get($fields,\'' . $item->name . '\'))<td> <x-lma-toggle :val="$row->' . $item->name . '" wire:change="toggleField({{$row->id}},\'' . $item->name . '\')" /></td>@endif ';
+            case "json":
+            case "array":
+            case "object":
+                return '@if(data_get($fields,\'' . $item->name . '\'))<td><x-lma-tags :params="$row->' . $item->name . '"/></td>@endif';
+            default:
+                return '@if(data_get($fields,\'' . $item->name . '\'))<td>{{$row->' . $item->name . '}}</td> @endif ';
+        }
+    }
+
+}

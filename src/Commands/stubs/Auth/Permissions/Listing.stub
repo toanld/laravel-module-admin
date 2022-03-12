@@ -1,0 +1,53 @@
+<?php
+
+namespace DumMyNamespace\Http\Livewire\Auth\Permissions;
+
+use App\Models\permission;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Component;
+use Livewire\WithPagination;
+
+class Listing extends Component
+{
+    use WithPagination;
+    use AuthorizesRequests;
+    public $fields = [
+		'title' => true,
+        'name' => true,
+		'roles' => true,
+        'created_at' => false,
+        'updated_at' => false,
+    ];
+    public $fid;
+    public $confirm = 0;
+
+    public function changeActive($id){
+        $this->authorize("auth.permissions.edit");
+        $data = permission::findOrFail($id);
+        $data->active = 1 - $data->active;
+        $data->save();
+        $this->dispatchBrowserEvent('success', 'permission successfully updated.');
+    }
+
+    function delete(){
+        $this->authorize("permissions.delete");
+        if($this->confirm >0){
+            $data = Permission::findOrFail($this->confirm);
+            $data->children()->delete();
+            $data->delete();
+        }
+        $this->confirm = 0;
+        $this->dispatchBrowserEvent('warning', 'permission successfully destroyed.');
+    }
+
+    public function render()
+    {
+        $data = new permission();
+        if($this->fid >0){
+        $data = $data->whereId($this->fid)->orWhere('parent_id',$this->fid);
+        }
+        $data = $data->with('roles','children')->whereParentId(0)->paginate(30);
+        return view('DumMyComponent::livewire.auth.permissions.listing', ['data' => $data])
+            ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Permissions Listing']);
+    }
+}

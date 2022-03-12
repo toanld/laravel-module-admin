@@ -1,0 +1,23 @@
+<?php
+
+namespace DumMyNamespace\Http\Livewire\Auth\AdminMenus;
+
+use App\Models\AdminMenu;
+use Livewire\Component;
+
+class Show extends Component
+{
+    public $record_id;
+
+    public function mount(){
+
+    }
+    public function render()
+    {
+        $data = AdminMenu::with(["roles","children"=>function($qr){
+            return $qr->orderBy("sort");
+        }])->findOrFail($this->record_id);
+        return view('DumMyComponent::livewire.auth.admin-menus.show',compact('data'))
+            ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Adminmenus Show']);
+    }
+}

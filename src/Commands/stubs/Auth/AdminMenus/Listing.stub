@@ -1,0 +1,61 @@
+<?php
+
+namespace DumMyNamespace\Http\Livewire\Auth\AdminMenus;
+
+use App\Models\AdminMenu;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Component;
+use Livewire\WithPagination;
+
+class Listing extends Component
+{
+    use WithPagination;
+    use AuthorizesRequests;
+
+    public $fields = [
+        'name' => true,
+        'icon' => true,
+        'route' => true,
+        'roles' => true,
+    ];
+    public $fid;
+    public $confirm = 0;
+
+    public function toggleField($id, $field)
+    {
+        $this->authorize("admin-menus.edit");
+        if (in_array($field, []))
+            $data = AdminMenu::findOrFail($id);
+        $data->update([
+            $field => !$data->$field
+        ]);
+        $this->dispatchBrowserEvent('success', 'AdminMenu successfully updated.');
+    }
+
+    function delete()
+    {
+        $this->authorize("admin-menus.delete");
+        if ($this->confirm > 0) {
+            AdminMenu::destroy($this->confirm);
+        }
+        $this->confirm = 0;
+        $this->dispatchBrowserEvent('warning', 'AdminMenu successfully destroyed.');
+    }
+
+    public function render()
+    {
+        $data = new AdminMenu();
+        if ($this->fid > 0) {
+            $data = $data->whereId($this->fid);
+        }else{
+            $data = $data->whereParentId(0);
+        }
+        $data = $data->with([
+            "children" => function ($qr) {
+                return $qr->orderBy("sort");
+            },"roles"
+        ])->orderBy("sort")->paginate(30);
+        return view('DumMyComponent::livewire.auth.admin-menus.listing', ['data' => $data])
+            ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Adminmenus Listing']);
+    }
+}

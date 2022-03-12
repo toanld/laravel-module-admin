@@ -1,0 +1,23 @@
+<?php
+
+namespace DumMyNamespace\Http\Livewire\Auth\Roles;
+
+use App\Models\Role;
+use Livewire\Component;
+
+class Show extends Component
+{
+
+    public $record_id;
+
+    public function mount(){
+
+    }
+    public function render()
+    {
+        $data = Role::with('permissions')->findOrFail($this->record_id);
+
+        return view('DumMyComponent::livewire.auth.roles.show',compact('data'))
+            ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Roles Show']);
+    }
+}

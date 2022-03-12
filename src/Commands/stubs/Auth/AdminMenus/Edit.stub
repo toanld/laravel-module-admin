@@ -1,0 +1,83 @@
+<?php
+
+namespace DumMyNamespace\Http\Livewire\Auth\AdminMenus;
+
+use App\Models\AdminMenu;
+use App\Models\Role;
+use Livewire\Component;
+
+class Edit extends Component
+{
+    public $record_id;
+    public $done = 3;
+    public $name = '', $parent_id, $sort, $icon = '', $route = '', $role_ids = [];
+
+    protected function rules()
+    {
+        return [
+            'name' => 'string',
+            'route' => 'string|unique:admin_menus,route,' . $this->record_id,
+            'role_ids' => 'array',
+
+        ];
+    }
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
+    public function mount()
+    {
+        $data = AdminMenu::with("roles")->findOrFail($this->record_id);
+        $this->name = $data->name;
+        $this->parent_id = $data->parent_id;
+        $this->sort = $data->sort;
+        $this->icon = $data->icon;
+        $this->route = $data->route;
+        $this->permission = $data->permission;
+        $this->role_ids = $data->roles->pluck("title","id");
+
+    }
+
+    public function update()
+    {
+        $this->validate();
+        $data = AdminMenu::findOrFail($this->record_id);
+        $data->fill([
+            'name' => $this->name,
+            'parent_id' => $this->parent_id,
+            'sort' => $this->sort,
+            'icon' => $this->icon,
+            'route' => $this->route,
+            'permission' => $this->permission,
+        ]);
+        if (!$data->clean) {
+            $data->update();
+        }
+        $data->resetRoles($this->role_ids);
+        session()->flash('success', 'AdminMenu successfully updated.');
+        switch ($this->done) {
+            case 0:
+                $this->redirect(route('admin.auth.admin-menus.create'));
+                break;
+            case 1:
+                $this->redirect(route('admin.auth.admin-menus.show', ['record_id' => $data->id]));
+                break;
+            default:
+                $this->redirect(route('admin.auth.admin-menus'));
+        }
+    }
+    public function render()
+    {
+        $roles = Role::get()->pluck("title", "id");
+        $parents = AdminMenu::whereParentId(0)->pluck("name", "id");
+        $max = AdminMenu::whereParentId($this->parent_id)->max("sort");
+        $sorts = [];
+        for($i=0;$i<=$max+1;$i++){
+            $sorts[$i] = $i;
+        }
+        return view('DumMyComponent::livewire.auth.admin-menus.edit', compact("roles", "parents","sorts"))
+            ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Adminmenus Edit']);
+    }
+}

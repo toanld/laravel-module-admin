@@ -1,0 +1,22 @@
+<?php
+
+namespace DumMyNamespace\Http\Livewire\Auth\Admins;
+
+use App\Models\User;
+use Livewire\Component;
+
+class Show extends Component
+{
+
+    public $record_id;
+
+    public function mount(){
+
+    }
+    public function render()
+    {
+        $data = User::with("roles")->findOrFail($this->record_id);
+        return view('DumMyComponent::livewire.auth.admins.show',compact('data'))
+            ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Admins Show']);
+    }
+}

@@ -1,0 +1,207 @@
+<?php
+
+namespace Hungnm28\LaravelModuleAdmin\Commands;
+
+use Hungnm28\LaravelModuleAdmin\Traits\CommandTrait;
+use Illuminate\Console\Command;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+
+class InstallCommand extends Command
+{
+    use CommandTrait;
+
+    protected $signature = 'lma:install';
+
+    protected $description = 'Make admin page';
+
+    protected $module;
+    protected $moduleName;
+
+    public function handle()
+    {
+        $this->info('lma:install command');
+        $this->moduleName = config("lma.module.name");
+        if (!$this->initModule()) {
+            $this->error("Module not found: $this->moduleName");
+        }
+         $this->copyAssets();
+         $this->copyProvider();
+        $this->copyView();
+        $this->installAuthModule('Auth', 'Index');
+
+        $this->installAuthModule('Auth/AdminMenus', 'Create');
+        $this->installAuthModule('Auth/AdminMenus', 'Edit');
+        $this->installAuthModule('Auth/AdminMenus', 'Show');
+        $this->installAuthModule('Auth/AdminMenus', 'Listing');
+
+        $this->installAuthModule('Auth/Admins', 'Create');
+        $this->installAuthModule('Auth/Admins', 'Edit');
+        $this->installAuthModule('Auth/Admins', 'Show');
+        $this->installAuthModule('Auth/Admins', 'Listing');
+
+        $this->installAuthModule('Auth/Permissions', 'Create');
+        $this->installAuthModule('Auth/Permissions', 'CreateGroup');
+        $this->installAuthModule('Auth/Permissions', 'Edit');
+        $this->installAuthModule('Auth/Permissions', 'Show');
+        $this->installAuthModule('Auth/Permissions', 'Listing');
+
+        $this->installAuthModule('Auth/Roles', 'Create');
+        $this->installAuthModule('Auth/Roles', 'Edit');
+        $this->installAuthModule('Auth/Roles', 'Show');
+        $this->installAuthModule('Auth/Roles', 'Listing');
+
+        $this->publishLayout();
+        $this->publishRoute();
+
+        // make default permission
+        $this->call('lma:add-permission', ['name' => "admin-menu"]);
+        $this->call('lma:add-permission', ['name' => "admins"]);
+        $this->call('lma:add-permission', ['name' => "roles"]);
+        $this->call('lma:add-permission', ['name' => "permissions"]);
+
+    }
+
+    protected function initModule()
+    {
+        $module = $this->laravel['modules']->find($this->moduleName);
+        if ($module) {
+            $this->module = $module;
+            return true;
+        }
+        return false;
+    }
+
+    protected function copyAssets()
+    {
+        $this->line("Copy Assets: ");
+        (new Filesystem)->copyDirectory(__DIR__ . '/../../publishes/resources/assets/sass', module_path($this->moduleName, 'Resources/assets/sass'));
+        (new Filesystem)->copyDirectory(__DIR__ . '/../../publishes/mix', module_path($this->moduleName));
+
+    }
+
+    protected function copyView()
+    {
+        $this->line("Copy Auth view: ");
+        (new Filesystem)->copyDirectory(__DIR__ . '/../../publishes/resources/views/livewire/auth', module_path($this->moduleName, 'Resources/views/livewire/auth'));
+        (new Filesystem)->copyDirectory(__DIR__ . '/../../publishes/resources/views/components', module_path($this->moduleName, 'Resources/views/components'));
+
+    }
+
+    protected function copyProvider()
+    {
+        copy(__DIR__ . '/../../publishes/app/Providers/PermissionsServiceProvider.php', app_path('Providers/PermissionsServiceProvider.php'));
+        $this->installServiceProviderAfter('JetstreamServiceProvider', 'PermissionsServiceProvider');
+    }
+
+    protected function installServiceProviderAfter($after, $name)
+    {
+        if (!Str::contains($appConfig = file_get_contents(config_path('app.php')), 'App\\Providers\\' . $name . '::class')) {
+            file_put_contents(config_path('app.php'), str_replace(
+                'App\\Providers\\' . $after . '::class,',
+                'App\\Providers\\' . $after . '::class,' . PHP_EOL . '        App\\Providers\\' . $name . '::class,',
+                $appConfig
+            ));
+        }
+    }
+
+    protected function installPackageJson(){
+
+    }
+
+    protected function installAuthModule($name, $method)
+    {
+        $folder = "$name";
+        $this->line("install $folder $method Class");
+        $this->folder = Str::studly($folder);
+        $stub = $this->getStub("$name/$method.stub");
+        $pathSave = $this->class_path(Str::studly($method) . ".php");
+        $stub = str_replace([
+            'DumMyNamespace',
+            'DumMyComponent'
+        ],
+            [
+                config("lma.module.namespace"),
+                config("lma.module.component")
+
+            ], $stub);
+        File::put($pathSave, $stub);
+    }
+
+    protected function publishRoute()
+    {
+        $this->line("publish Route");
+
+        $stub = $this->getStub("route.stub");
+        $pathSave = module_path(config('lma.module.name'), "Routes/web.php");
+        $stub = str_replace([
+            'DumMyModulePrefix',
+            'DumMyRouteName',
+            'DumMyHomeController',
+            'DumMyNamespace'
+        ],
+            [
+                config("lma.module.prefix"),
+                config("lma.module.route"),
+                Str::studly(config('lma.module.name'))."Controller",
+                config("lma.module.namespace")
+
+            ], $stub);
+        File::put($pathSave, $stub);
+    }
+
+    protected function publishLayout()
+    {
+        $this->line("publish Layout");
+        $stub = $this->getStub("layout-class.stub");
+        $pathSave = module_path(config('lma.module.name'), "Views/Components/LayoutMaster.php");
+        $this->ensureDirectoryExists($pathSave);
+        $stub = str_replace([
+            'DumMyNamespace',
+            'DumMyComponent',
+        ],
+            [
+                config("lma.module.namespace"),
+                config("lma.module.component"),
+
+            ], $stub);
+        File::put($pathSave, $stub);
+
+        $this->line("publish Layout");
+        $stub = $this->getStub("Navbar.stub");
+        $pathSave = module_path(config('lma.module.name'), "Views/Components/Navbar.php");
+        $this->ensureDirectoryExists($pathSave);
+        $stub = str_replace([
+            'DumMyNamespace',
+            'DumMyComponent',
+        ],
+            [
+                config("lma.module.namespace"),
+                config("lma.module.component"),
+
+            ], $stub);
+        File::put($pathSave, $stub);
+
+        $stub = $this->getStub("layout-view.stub");
+        $pathSave = module_path(config('lma.module.name'), "Resources/views/layouts/master.blade.php");
+        $stub = str_replace([
+            'DumMyComponent',
+        ],
+            [
+                config("lma.module.component"),
+
+            ], $stub);
+        File::put($pathSave, $stub);
+        $stub = $this->getStub("home-view.stub");
+        $pathSave = module_path(config('lma.module.name'), "Resources/views/index.blade.php");
+        $stub = str_replace([
+            'DumMyComponent',
+        ],
+            [
+                config("lma.module.component"),
+
+            ], $stub);
+        File::put($pathSave, $stub);
+    }
+}

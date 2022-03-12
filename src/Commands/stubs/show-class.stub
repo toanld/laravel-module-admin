@@ -1,0 +1,22 @@
+<?php
+
+namespace DumMyNamespace;
+
+use DumMyModelClass;
+use Livewire\Component;
+
+class Show extends Component
+{
+
+    public $record_id;
+
+    public function mount(){
+
+    }
+    public function render()
+    {
+        $data = DumMyModelName::findOrFail($this->record_id);
+        return view('admin::livewire.DumMyViewFolder.show',compact('data'))
+            ->layout('admin::layouts.master', ['title' => 'DumMyTitle Show']);
+    }
+}

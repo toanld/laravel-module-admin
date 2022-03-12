@@ -1,0 +1,49 @@
+<?php
+
+namespace DumMyNamespace\Http\Livewire\Auth\Roles;
+
+use App\Models\Role;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Component;
+use Livewire\WithPagination;
+
+class Listing extends Component
+{
+    use WithPagination;
+    use AuthorizesRequests;
+
+    public $fields = [
+        'name' => true,
+        'title' => true,
+        'permissions' => true,
+        'created_at' => false,
+        'updated_at' => false,
+    ];
+    public $fid;
+    public $confirm = 0;
+
+
+    function delete()
+    {
+        $this->authorize("roles.delete");
+        if ($this->confirm > 0) {
+            Role::destroy($this->confirm);
+        }
+        $this->confirm = 0;
+        $this->dispatchBrowserEvent('warning', 'Role successfully destroyed.');
+    }
+
+    public function render()
+    {
+        $data = new Role();
+        if ($this->fid > 0) {
+            $data = $data->whereId($this->fid);
+        }
+        $data = $data->with(['permissions'=>function($qr){
+            return $qr->whereParentId(0);
+        }])->paginate(30);
+
+        return view('DumMyComponent::livewire.auth.roles.listing', ['data' => $data])
+            ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Roles Listing']);
+    }
+}

@@ -1,0 +1,122 @@
+<?php
+
+namespace DumMyNamespace\Http\Livewire\Auth\Permissions;
+
+use App\Models\permission;
+use App\Models\Role;
+use Illuminate\Support\Str;
+use Livewire\Component;
+
+class CreateGroup extends Component
+{
+    public $done = 0;
+    public $name, $title, $create = 1, $edit = 1, $delete = 1, $view_roles = [], $create_roles = [], $edit_roles = [], $delete_roles = [];
+    protected $rules = [
+        'name' => 'string|unique:permissions,name',
+        'title' => 'string',
+        'view_roles' => 'array',
+        'create_roles' => 'array',
+        'edit_roles' => 'array',
+        'delete_roles' => 'array',
+
+    ];
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
+    public function updatedName()
+    {
+        $this->name = Str::lower($this->name);
+    }
+
+    public function updatedTitle()
+    {
+        $this->name = Str::headline($this->name);
+    }
+
+    public function store()
+    {
+        $this->validate();
+        $data = permission::create([
+            'name' => $this->name,
+            'title' => $this->title,
+        ]);
+        if ($data) {
+            $role_parent = [];
+            foreach ($this->view_roles as $r) {
+                $role_parent[$r] = $r;
+            }
+            foreach ($this->create_roles as $r) {
+                $role_parent[$r] = $r;
+            }
+            foreach ($this->edit_roles as $r) {
+                $role_parent[$r] = $r;
+            }
+            foreach ($this->delete_roles as $r) {
+                $role_parent[$r] = $r;
+            }
+            $data->resetRoles($role_parent);
+            if ($this->create) {
+                $cData = $data->children()->create([
+                    "name" => $this->name . ".create",
+                    "title" => "Create"
+                ]);
+                if ($cData) {
+                    $cData->resetRoles($this->create_roles);
+                }
+            }
+
+            if ($this->edit) {
+                $eData = $data->children()->create([
+                    "name" => $this->name . ".edit",
+                    "title" => "Edit"
+                ]);
+                if ($eData) {
+                    $eData->resetRoles($this->edit_roles);
+                }
+            }
+
+            if ($this->delete) {
+                $dData = $data->children()->create([
+                    "name" => $this->name . ".delete",
+                    "title" => "Delete"
+                ]);
+                if ($dData) {
+                    $dData->resetRoles($this->delete_roles);
+                }
+            }
+
+            session()->flash('success', 'permission successfully created.');
+            switch ($this->done) {
+                case 0:
+                    $this->redirect(route('admin.auth.permissions.create'));
+                    break;
+                case 1:
+                    $this->redirect(route('admin.auth.permissions.show', ['record_id' => $data->id]));
+                    break;
+                case 3:
+                    $this->redirect(route('admin.auth.permissions.edit', ['record_id' => $data->id]));
+                    break;
+                default:
+                    $this->redirect(route('admin.auth.permissions'));
+            }
+        }
+    }
+
+
+    public function resetForm()
+    {
+        $this->redirect(route('admin.auth.permissions.create'));
+    }
+
+
+    public function render()
+    {
+        $roles = Role::get()->pluck("title", "id");
+        $parents = Permission::whereParentId(0)->get()->pluck("title", "id");
+        return view('DumMyComponent::livewire.auth.permissions.create-group', compact("roles", "parents"))
+            ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Permissions Create']);
+    }
+}

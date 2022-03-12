@@ -1,0 +1,129 @@
+table{
+    @apply w-full;
+    tr{
+        @apply border-t;
+    }
+    th,td{
+        @apply text-left text-xs p-2;
+    }
+    tbody{
+        tr{
+            @apply hover:bg-gray-100 ;
+        }
+    }
+
+}
+.toggle:checked{
+    &+.dot{
+         transform: translateX(100%);
+        background-color: #48bb78;
+    }
+}
+#adm-menu{
+    @apply w-12 min-h-full bg-white border-gray-300 border-r ;
+}
+#menus{
+    @apply w-full block text-sm;
+    .item{
+        @apply w-full border-b relative bg-white;
+        >.link{
+            @apply flex h-10 items-center  relative cursor-pointer;
+            .icon{
+                @apply flex-none w-full flex items-center justify-center;
+            }
+            .link-title{
+                @apply absolute top-0 hidden left-full font-bold w-40 pl-2 h-10 flex items-center;
+            }
+            &:hover{
+                @apply underline;
+            }
+        }
+        .children{
+            @apply absolute w-40 left-full top-8 pb-2 bg-gray-100 hidden text-gray-600 ;
+            .child{
+                @apply w-full;
+                .link{
+                    @apply w-full flex h-8 items-center cursor-pointer;
+                    .icon{
+                        @apply w-10 flex-none flex items-center justify-center;
+                    }
+                    &:hover{
+                        @apply underline;
+                    }
+                }
+                &.active{
+                    @apply font-bold;
+                }
+            }
+        }
+        &:hover{
+            @apply bg-gray-100;
+            >.link{
+                .link-title{
+                    @apply flex bg-gray-100;
+                }
+            }
+            .children{
+                @apply block;
+            }
+        }
+        &.active{
+            @apply bg-teal-100;
+            .children{
+                @apply bg-teal-100;
+            }
+            &:hover{
+                >.link{
+                    .link-title{
+                        @apply flex bg-teal-100;
+                    }
+                }
+            }
+        }
+    }
+}
+#page-control{
+    @apply hidden;
+    &:checked+#adm-container{
+        #adm-menu{
+            @apply w-60;
+            #menus{
+                @apply w-full;
+                .item{
+                    >.link{
+                        @apply w-full;
+                        .icon{
+                            @apply w-12;
+                        }
+                        .link-title{
+                            @apply flex static ;
+                        }
+                    }
+                    &:hover{
+                        .children{
+                            @apply hidden;
+                        }
+                    }
+                    .children{
+                        @apply static w-full;
+                        .child{
+                            >.link{
+                                .icon{
+                                    @apply w-12;
+                                }
+                            }
+                        }
+                    }
+                    &.active{
+                        >.link{
+                            @apply -mb-2;
+                        }
+                        .children{
+                            @apply block;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,74 @@
+<?php
+
+namespace DumMyNamespace\Http\Livewire\Auth\Roles;
+
+use App\Models\Permission;
+use App\Models\Role;
+use Livewire\Component;
+
+
+class Create extends Component
+{
+
+    public $done = 0;
+    public $name = '', $title = '', $permission_ids = [];
+    protected $rules = [
+        'name' => 'string|unique:roles,name',
+        'title' => 'string',
+
+    ];
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
+    public function store()
+    {
+        $this->validate();
+        $data = Role::create([
+            'name' => $this->name,
+            'title' => $this->title,
+
+        ]);
+        if ($data) {
+            $listPermission = Permission::find($this->permission_ids)->reduce(function ($rt,$item){
+                if($item->parent_id>0){
+                    $rt[$item->parent_id] = $item->parent_id;
+                }
+                $rt[$item->id] = $item->id;
+                return $rt;
+            },[]);
+            $data->resetPermissions(array_values($listPermission));
+
+            session()->flash('success', 'Role successfully created.');
+            switch ($this->done) {
+                case 0:
+                    $this->redirect(route('admin.auth.roles.create'));
+                    break;
+                case 1:
+                    $this->redirect(route('admin.auth.roles.show', ['record_id' => $data->id]));
+                    break;
+                case 3:
+                    $this->redirect(route('admin.auth.roles.edit', ['record_id' => $data->id]));
+                    break;
+                default:
+                    $this->redirect(route('admin.auth.roles'));
+            }
+        }
+    }
+
+
+    public function resetForm()
+    {
+        $this->redirect(route('admin.auth.roles.create'));
+    }
+
+
+    public function render()
+    {
+        $permissions = Permission::with("children")->whereParentId(0)->get();
+        return view('DumMyComponent::livewire.auth.roles.create', compact("permissions"))
+            ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Roles Create']);
+    }
+}

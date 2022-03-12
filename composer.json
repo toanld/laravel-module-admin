@@ -1,0 +1,33 @@
+{
+    "name": "hungnm28/laravel-module-admin",
+    "description": "This package used for create laravel admin template",
+    "type": "library",
+    "require": {
+        "php": ">=8.0",
+        "nwidart/laravel-modules": ">=6.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Hungnm\\LaravelModuleAdmin\\": "src/"
+        },
+        "files": ["src/Helpers/includes.php"]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "\\Hungnm28\\LaravelModuleAdmin\\LaravelModuleAdminServiceProvider"
+            ],
+            "aliases": {
+                "LaravelModuleAdmin": "\\Hungnm28\\LaravelModuleAdmin\\LaravelModuleAdmin"
+            }
+        }
+    },
+    "authors": [
+        {
+            "name": "HungNM",
+            "email": "nguyenmanhhung28@gmail.com"
+        }
+    ],
+
+}

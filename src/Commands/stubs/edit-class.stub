@@ -1,0 +1,63 @@
+<?php
+
+namespace DumMyNamespace;
+
+use DumMyModelClass;
+use Livewire\Component;
+
+class Edit extends Component
+{
+    public $record_id;
+    public $done = 3;
+    public DumMyListFields;
+
+    protected function rules(){
+        return [
+            DumMyRules
+        ];
+    }
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
+    public function mount()
+    {
+        $data = DumMyModelName::findOrFail($this->record_id);
+        DumMySetData
+    }
+
+    public function update()
+    {
+        $this->validate();
+        $data = DumMyModelName::findOrFail($this->record_id);
+        $data->fill([
+            DumMyFormFields]);
+        if(!$data->clean){
+            $data->update();
+            session()->flash('success', 'DumMyModelName successfully updated.');
+            switch ($this->done){
+                case 0: $this->redirect(route('DumMyRoute.create'));
+                        break;
+                case 1: $this->redirect(route('DumMyRoute.show',['record_id'=>$data->id]));
+                        break;
+                default: $this->redirect(route('DumMyRoute'));
+            }
+        }
+    }
+
+    public function removeItem($val,$k){
+        if(isset($this->$val) && isset($this->$val[$k])){
+            unset($this->$val[$k]);
+            $this->$val = array_values($this->$val);
+        }
+    }
+
+    public function render()
+    {
+
+        return view('admin::livewire.DumMyViewFolder.edit')
+            ->layout('admin::layouts.master', ['title' => 'DumMyTitle Edit']);
+    }
+}

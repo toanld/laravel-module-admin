@@ -1,0 +1,19 @@
+<?php
+
+namespace DumMyNamespace\Views\Components;
+
+use App\Models\AdminMenu;
+use Illuminate\View\Component;
+
+class Navbar extends Component
+{
+
+    public function render()
+    {
+        $data = AdminMenu::whereParentId(0)->with(["children"=>function($qr){
+             $qr->orderBy("sort");
+             return $qr;
+        }])->orderBy("sort")->get();
+        return view("DumMyComponent::components.navbar",compact("data"));
+    }
+}

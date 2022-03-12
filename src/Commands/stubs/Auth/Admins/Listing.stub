@@ -1,0 +1,50 @@
+<?php
+
+namespace DumMyNamespace\Http\Livewire\Auth\Admins;
+
+use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Component;
+use Livewire\WithPagination;
+
+class Listing extends Component
+{
+    use WithPagination;
+    use AuthorizesRequests;
+
+    public $fields = [
+        'name' => true,
+        'email' => true,
+        'email_verified_at' => true,
+        'roles' => true,
+        'is_admin' => true,
+        'created_at' => false,
+        'updated_at' => false,
+    ];
+    public $fid;
+    public $confirm = 0;
+
+
+    public function toggleField($id, $field)
+    {
+        $this->authorize("admins.edit");
+        if (in_array($field,['is_admin']))
+            $data = User::findOrFail($id);
+        $data->update([
+            $field => !$data->$field
+        ]);
+        $this->dispatchBrowserEvent('success', 'User successfully updated.');
+    }
+
+
+    public function render()
+    {
+        $data = new User();
+        if ($this->fid > 0) {
+            $data = $data->whereId($this->fid);
+        }
+        $data = $data->with("roles")->whereIsAdmin(1)->paginate(30);
+        return view('DumMyComponent::livewire.auth.admins.listing', ['data' => $data])
+            ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Admins Listing']);
+    }
+}

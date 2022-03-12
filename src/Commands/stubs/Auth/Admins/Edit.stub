@@ -1,0 +1,80 @@
+<?php
+
+namespace DumMyNamespace\Http\Livewire\Auth\Admins;
+
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Livewire\Component;
+
+class Edit extends Component
+{
+    public $record_id;
+    public $done = 3;
+    public $name, $email, $password, $is_admin = 0, $role_ids = [];
+
+    protected function rules()
+    {
+        $rules = [
+            'name' => 'string',
+            'email' => 'email|unique:users,email,' . $this->record_id,
+            'role_ids' => 'array',
+        ];
+        if ($this->password) {
+            $rules["password"] = 'required|min:8';
+        }
+        return $rules;
+    }
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
+    public function mount()
+    {
+        $data = User::with("roles")->findOrFail($this->record_id);
+        $this->name = $data->name;
+        $this->email = $data->email;
+        $this->is_admin = $data->is_admin;
+        $this->role_ids = $data->roles->pluck("id");
+
+    }
+
+    public function update()
+    {
+        $this->validate();
+        $data = User::findOrFail($this->record_id);
+        $fields = [
+            'name' => $this->name,
+            'email' => $this->email,
+            'is_admin' => $this->is_admin,
+        ];
+        if ($this->password) {
+            $fields['password'] = Hash::make($this->password);
+        }
+        $data->fill($fields);
+        if (!$data->clean) {
+            $data->update();
+        }
+        $data->refreshRoleIds($this->role_ids);
+        session()->flash('success', 'User successfully updated.');
+        switch ($this->done) {
+            case 0:
+                $this->redirect(route('admin.auth.admins.create'));
+                break;
+            case 1:
+                $this->redirect(route('admin.auth.admins.show', ['record_id' => $data->id]));
+                break;
+            default:
+                $this->redirect(route('admin.auth.admins'));
+        }
+    }
+
+    public function render()
+    {
+        $roles = Role::get()->pluck("title", "id");
+        return view('DumMyComponent::livewire.auth.admins.edit', compact("roles"))
+            ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Admins Edit']);
+    }
+}

@@ -1,0 +1,53 @@
+<?php
+
+namespace DumMyNamespace;
+
+use DumMyModelClass;
+use Livewire\Component;
+use Livewire\WithPagination;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
+class Listing extends Component
+{
+    use WithPagination;
+    use AuthorizesRequests;
+
+    public $fields = [
+        DumMyFields
+        'created_at' => false,
+        'updated_at' => false,
+    ];
+    public $fid;
+    public $confirm = 0;
+
+     public function toggleField($id, $field)
+        {
+            $this->authorize("DumMyPermission.edit");
+            if (in_array($field,[DumMyToggleField]))
+                $data = DumMyModelName::findOrFail($id);
+            $data->update([
+                $field => !$data->$field
+            ]);
+            $this->dispatchBrowserEvent('success', 'DumMyModelName successfully updated.');
+        }
+
+    function delete(){
+        $this->authorize("DumMyPermission.delete");
+        if($this->confirm >0){
+            DumMyModelName::destroy($this->confirm);
+        }
+        $this->confirm = 0;
+        $this->dispatchBrowserEvent('warning', 'DumMyModelName successfully destroyed.');
+    }
+
+    public function render()
+    {
+        $data = new DumMyModelName();
+        if($this->fid >0){
+        $data = $data->whereId($this->fid);
+        }
+        $data = $data->paginate(30);
+        return view('admin::livewire.DumMyViewFolder.listing', ['data' => $data])
+            ->layout('admin::layouts.master', ['title' => 'DumMyTitle Listing']);
+    }
+}
