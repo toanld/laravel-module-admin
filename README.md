@@ -31,7 +31,7 @@ Add this to .env file
 ASSET_URL=/dev
 ASSET_ICON=/assets
 APP_SUPER_ADMIN=<list super admin id eg: 1,2,3>
-``
+```
 
 Run command
 ```sh
