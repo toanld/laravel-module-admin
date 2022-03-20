@@ -135,7 +135,7 @@ class InstallCommand extends Command
     {
         $this->line("publish Route");
 
-        $stub = $this->getStub("route.stub");
+        $stub = $this->getStub("install-route.stub");
         $pathSave = module_path(config('lma.module.name'), "Routes/web.php");
         $stub = str_replace([
             'DumMyModulePrefix',

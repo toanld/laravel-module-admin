@@ -86,11 +86,11 @@ class MakeShowCommand extends Command
                 return '<tr><th class=" text-right border-r">'.$item->label.':</th><td >{{$data->'.$item->name.'}}</td></tr>';
             case 'boolean':
 
-                return '<tr><th class=" text-right border-r">'.$item->label.':</th><td ><x-lma-toggle :val="$data->'.$item->name.'" /></td></tr>';
+                return '<tr><th class=" text-right border-r">'.$item->label.':</th><td ><x-lma.label.toggle :val="$data->'.$item->name.'" /></td></tr>';
             case 'json':
             case 'array':
             case 'object':
-                return '<tr><th class=" text-right border-r">'.$item->label.':</th><td ><x-lma-tags :params="$data->' . $item->name . '" /></td></tr>';
+                return '<tr><th class=" text-right border-r">'.$item->label.':</th><td ><x-lma.label.tags :params="$data->' . $item->name . '" /></td></tr>';
             default:
                 return '<tr><th class=" text-right border-r">'.$item->label.':</th><td >{{$data->'.$item->name.'}}</td></tr>';
         }

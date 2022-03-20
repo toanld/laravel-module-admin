@@ -31,7 +31,7 @@ class MakeRouteCommand extends Command
         $template = str_replace(
             [
                 'DumMyModule',
-                'DumMyClassFolder'
+                'DumMyNamespace'
             ],
             [
                 $this->getFonderDot(),
