@@ -1,6 +1,6 @@
 <div class="w-full min-h-screen">
-    <x-lma-header-page group="Auth Roles" page="Show"/>
-    <x-lma-box-show listing="{{route('admin.auth.roles')}}" edit="{{route('admin.auth.roles.edit',['record_id'=>$data->id])}}">
+    <x-lma.header-page group="Auth Roles" page="Show"/>
+    <x-lma.box.show listing="{{route('admin.auth.roles')}}" edit="{{route('admin.auth.roles.edit',['record_id'=>$data->id])}}">
         <tr>
             <th class="text-right w-48 border-r">Id:</th>
             <td>{{$data->id}}</td>
@@ -49,5 +49,5 @@
             <th class="text-right border-r">Updated at:</th>
             <td>{{$data->updated_at}}</td>
         </tr>
-    </x-lma-box-show>
+    </x-lma.box.show>
 </div>

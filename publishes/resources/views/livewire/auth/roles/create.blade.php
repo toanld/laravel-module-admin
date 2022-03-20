@@ -1,9 +1,9 @@
 <div class="w-full min-h-screen">
-    <x-lma-header-page group="Auth/Roles" page="Create" />
-    <x-lma-box-create listing="{{route('admin.auth.roles')}}" >
-        <x-lma-form-input type="text" name="name" label="Name" />
-		<x-lma-form-input type="text" name="title" label="Title" />
-        <x-lma-form-field name="permission_ids" label="Permissions">
+    <x-lma.header-page group="Auth/Roles" page="Create" />
+    <x-lma.box.create listing="{{route('admin.auth.roles')}}" >
+        <x-lma.form.input type="text" name="name" label="Name" />
+		<x-lma.form.input type="text" name="title" label="Title" />
+        <x-lma.form.field name="permission_ids" label="Permissions">
             <div class="w-full flex flex-wrap">
                 @foreach($permissions as $permission)
                     <div class="p-1 flex-auto">
@@ -25,6 +25,6 @@
 
                 @endforeach
             </div>
-        </x-lma-form-field>
-    </x-lma-box-create>
+        </x-lma.form.field>
+    </x-lma.box.create>
 </div>

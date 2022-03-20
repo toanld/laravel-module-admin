@@ -19,7 +19,6 @@ return new class extends Migration {
             $table->unsignedBigInteger("parent_id")->nullable()->default(0);
             $table->unsignedBigInteger("sort")->nullable()->default(0);
             $table->string("icon")->nullable()->default("");
-            $table->string("permission")->nullable()->default("");
             $table->timestamps();
         });
         Schema::create('roles_admin_menus', function (Blueprint $table) {

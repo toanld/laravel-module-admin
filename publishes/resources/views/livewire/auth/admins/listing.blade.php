@@ -1,9 +1,9 @@
 <div class="w-full min-h-screen">
-    <x-lma-header-page group="Auth/ Admins" page="Listing"/>
-    <x-lma-box-listing :fields="$fields" class="min-h-screen" permission="admins." create="{{route('admin.auth.admins.create')}}">
+    <x-lma.header-page group="Auth/ Admins" page="Listing"/>
+    <x-lma.box.listing :fields="$fields" class="min-h-screen" permission="admins." create="{{route('admin.auth.admins.create')}}">
         <x-slot name="filter">
             <div class="w-full max-w-screen-lg">
-                <x-lma-form-input type="text" name="fid" label="Id" placeholder="Id..."/>
+                <x-lma.form.input type="text" name="fid" label="Id" placeholder="Id..."/>
             </div>
         </x-slot>
         <table class="w-full">
@@ -27,19 +27,19 @@
                     <th>{{$row->id}}</th>
                     @if(data_get($fields,'name'))<td>{{$row->name}}</td> @endif
 					@if(data_get($fields,'email'))<td>{{$row->email}}</td> @endif
-					@if(data_get($fields,'roles'))<td><x-lma-tags :params="$row->roles->pluck('title','id')" /></td> @endif
+					@if(data_get($fields,'roles'))<td><x-lma.label.tags :params="$row->roles->pluck('title','id')" /></td> @endif
                     @if(data_get($fields,'email_verified_at'))<td>{{$row->email_verified_at}}</td> @endif
-                    @if(data_get($fields,'is_admin'))<td> <x-lma-toggle :val="$row->is_admin" wire:change="toggleField({{$row->id}},'is_admin')" /></td>@endif
+                    @if(data_get($fields,'is_admin'))<td> <x-lma.btn.toggle :val="$row->is_admin" wire:change="toggleField({{$row->id}},'is_admin')" /></td>@endif
                     @if(data_get($fields,'created_at'))<td>{{$row->created_at}}</td> @endif
                     @if(data_get($fields,'updated_at'))<td>{{$row->updated_at}}</td> @endif
                     <td>
                         <div class="flex flex-row justify-end space-x-1">
-                            <x-lma-btn-show href="{{route('admin.auth.admins.show',['record_id'=>$row->id])}}"></x-lma-btn-show>
+                            <x-lma.btn.show href="{{route('admin.auth.admins.show',['record_id'=>$row->id])}}"></x-lma.btn.show>
                             @can('admins.edit')
-                                <x-lma-btn-edit href="{{route('admin.auth.admins.edit',['record_id'=>$row->id])}}"></x-lma-btn-edit>
+                                <x-lma.btn.edit href="{{route('admin.auth.admins.edit',['record_id'=>$row->id])}}"></x-lma.btn.edit>
                             @endcan
                             @can("admins.delete")
-                                <x-lma-btn-delete :record="$row->id" :confirm="$confirm"></x-lma-btn-delete>
+                                <x-lma.btn.delete :record="$row->id" :confirm="$confirm"></x-lma.btn.delete>
                             @endcan
                         </div>
                     </td>
@@ -54,5 +54,5 @@
                 </div>
             </div>
         </x-slot>
-    </x-lma-box-listing>
+    </x-lma.box.listing>
 </div>

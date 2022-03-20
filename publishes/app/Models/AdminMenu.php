@@ -14,6 +14,13 @@ class AdminMenu extends Model
 
     public static $listFields = ["id", "name", "parent_id", "sort", "icon", "route", "updated_at", "created_at"];
 
+    public function children(){
+        return $this->hasMany(AdminMenu::class,"parent_id");
+    }
+    public function parent(){
+        return $this->belongsTo(AdminMenu::class,"parent_id");
+    }
+
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'roles_admin_menus');

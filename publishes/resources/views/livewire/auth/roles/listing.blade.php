@@ -1,9 +1,9 @@
 <div class="w-full min-h-screen">
-    <x-lma-header-page group="Auth/Roles" page="Listing"/>
-    <x-lma-box-listing :fields="$fields" class="min-h-screen" permission="roles" create="{{route('admin.auth.roles.create')}}">
+    <x-lma.header-page group="Auth/Roles" page="Listing"/>
+    <x-lma.box.listing :fields="$fields" class="min-h-screen" permission="roles" create="{{route('admin.auth.roles.create')}}">
         <x-slot name="filter">
             <div class="w-full max-w-screen-lg">
-                <x-lma-form-input type="text" name="fid" label="Id" placeholder="Id..."/>
+                <x-lma.form.input type="text" name="fid" label="Id" placeholder="Id..."/>
             </div>
         </x-slot>
         <table class="w-full">
@@ -26,18 +26,18 @@
                     @if(data_get($fields,'name'))<td>{{$row->name}}</td> @endif
 					@if(data_get($fields,'title'))<td>{{$row->title}}</td> @endif
 					@if(data_get($fields,'permissions'))
-                        <td><x-lma-tags :params="$row->permissions->pluck('title','id')" /></td>
+                        <td><x-lma.label.tags :params="$row->permissions->pluck('title','id')" /></td>
                     @endif
                     @if(data_get($fields,'created_at'))<td>{{$row->created_at}}</td> @endif
                     @if(data_get($fields,'updated_at'))<td>{{$row->updated_at}}</td> @endif
                     <td>
                         <div class="flex flex-row justify-end space-x-1">
-                            <x-lma-btn-show href="{{route('admin.auth.roles.show',['record_id'=>$row->id])}}"></x-lma-btn-show>
+                            <x-lma.btn.show href="{{route('admin.auth.roles.show',['record_id'=>$row->id])}}"></x-lma.btn.show>
                             @can('roles.edit')
-                                <x-lma-btn-edit href="{{route('admin.auth.roles.edit',['record_id'=>$row->id])}}"></x-lma-btn-edit>
+                                <x-lma.btn.edit href="{{route('admin.auth.roles.edit',['record_id'=>$row->id])}}"></x-lma.btn.edit>
                             @endcan
                             @can("roles.delete")
-                                <x-lma-btn-delete :record="$row->id" :confirm="$confirm"></x-lma-btn-delete>
+                                <x-lma.btn.delete :record="$row->id" :confirm="$confirm"></x-lma.btn.delete>
                             @endcan
                         </div>
                     </td>
@@ -52,5 +52,5 @@
                 </div>
             </div>
         </x-slot>
-    </x-lma-box-listing>
+    </x-lma.box.listing>
 </div>

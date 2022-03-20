@@ -105,11 +105,11 @@ class MakeListCommand extends Command
     {
         switch ($item->type) {
             case "boolean":
-                return '@if(data_get($fields,\'' . $item->name . '\'))<td> <x-lma-toggle :val="$row->' . $item->name . '" wire:change="toggleField({{$row->id}},\'' . $item->name . '\')" /></td>@endif ';
+                return '@if(data_get($fields,\'' . $item->name . '\'))<td> <x-lma.btn.toggle :val="$row->' . $item->name . '" wire:change="toggleField({{$row->id}},\'' . $item->name . '\')" /></td>@endif ';
             case "json":
             case "array":
             case "object":
-                return '@if(data_get($fields,\'' . $item->name . '\'))<td><x-lma-tags :params="$row->' . $item->name . '"/></td>@endif';
+                return '@if(data_get($fields,\'' . $item->name . '\'))<td><x-lma.label.tags :params="$row->' . $item->name . '"/></td>@endif';
             default:
                 return '@if(data_get($fields,\'' . $item->name . '\'))<td>{{$row->' . $item->name . '}}</td> @endif ';
         }

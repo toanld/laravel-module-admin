@@ -4,7 +4,7 @@
     $placeholder = $placeholder!=''?$placeholder:$label.'...';
 
 @endphp
-<x-lma-form-field :name="$name" :label="$label">
+<x-lma.form.field :name="$name" :label="$label">
     <div class="w-full block">
         @foreach($vals as $val)
             @if(isset($params[$val])) <span class="inline-block">{{$params[$val]}}</span>@endif
@@ -20,4 +20,4 @@
             @endforeach
         </ul>
     </div>
-</x-lma-form-field>
+</x-lma.form.field>

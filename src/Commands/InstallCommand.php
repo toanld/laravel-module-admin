@@ -2,6 +2,7 @@
 
 namespace Hungnm28\LaravelModuleAdmin\Commands;
 
+use App\Models\User;
 use Hungnm28\LaravelModuleAdmin\Traits\CommandTrait;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
@@ -60,6 +61,7 @@ class InstallCommand extends Command
         $this->call('lma:add-permission', ['name' => "admins"]);
         $this->call('lma:add-permission', ['name' => "roles"]);
         $this->call('lma:add-permission', ['name' => "permissions"]);
+        $this->call('db:seed', ['--class' => "AdminMenuSeeder"]);
 
     }
 
@@ -76,7 +78,7 @@ class InstallCommand extends Command
     protected function copyAssets()
     {
         $this->line("Copy Assets: ");
-        (new Filesystem)->copyDirectory(__DIR__ . '/../../publishes/resources/assets/sass', module_path($this->moduleName, 'Resources/assets/sass'));
+        (new Filesystem)->copyDirectory(__DIR__ . '/../../publishes/resources/assets', module_path($this->moduleName, 'Resources/assets'));
         (new Filesystem)->copyDirectory(__DIR__ . '/../../publishes/mix', module_path($this->moduleName));
 
     }
@@ -133,7 +135,7 @@ class InstallCommand extends Command
     {
         $this->line("publish Route");
 
-        $stub = $this->getStub("route.stub");
+        $stub = $this->getStub("install-route.stub");
         $pathSave = module_path(config('lma.module.name'), "Routes/web.php");
         $stub = str_replace([
             'DumMyModulePrefix',
@@ -203,5 +205,18 @@ class InstallCommand extends Command
 
             ], $stub);
         File::put($pathSave, $stub);
+    }
+
+    protected function createAdminusers(){
+        $listSuper = explode(",", env('APP_SUPER_ADMIN'));
+        $users = User::find($listSuper);
+        if($users){
+            $users->map(function ($user){
+                $user->update(["is_admin"=>1]);
+            });
+        }else{
+            $this->line("Create new admin");
+        }
+
     }
 }
