@@ -120,15 +120,15 @@ class MakeCreateCommand extends Command
     {
         switch ($item->type) {
             case 'textarea':
-                return '<x-lma-form-textarea name="' . $item->name . '" label="' . $item->label . '" />';
+                return '<x-lma.forms.textarea name="' . $item->name . '" label="' . $item->label . '" />';
             case 'boolean':
-                return '<x-lma-form-toggle name="' . $item->name . '" label="' . $item->label . '" />';
+                return '<x-lma.forms.toggle name="' . $item->name . '" label="' . $item->label . '" />';
             case 'json':
             case 'array':
             case 'object':
-                return '<x-lma-form-array  name="' . $item->name . '" label="' . $item->label . '" :data="$' . $item->name . '"/>';
+                return '<x-lma.forms.array  name="' . $item->name . '" label="' . $item->label . '" :data="$' . $item->name . '"/>';
             default:
-                return '<x-lma-form-input type="' . $item->type . '" name="' . $item->name . '" label="' . $item->label . '" />';
+                return '<x-lma.forms.input type="' . $item->type . '" name="' . $item->name . '" label="' . $item->label . '" />';
         }
     }
 }

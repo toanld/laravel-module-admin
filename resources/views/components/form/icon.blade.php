@@ -12,7 +12,7 @@
             }
     }
 @endphp
-<x-lma-form-field :name="$name" :label="$label">
+<x-lma.form.field :name="$name" :label="$label">
     <div x-data="{open : false}" class="w-full relative">
         <label @click="open=!open" class="btn-primary">@if($val) {!! lmaIcon($val) !!} <span class="text">{{$val}}</span> @else Icon @endif</label>
         <div x-show="open" @click.away="open = false" class="w-full h-60 overflow-auto border absolute bg-white ">
@@ -29,4 +29,4 @@
             </div>
         </div>
     </div>
-</x-lma-form-field>
+</x-lma.form.field>

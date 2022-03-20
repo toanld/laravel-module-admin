@@ -4,7 +4,7 @@
     $placeholder = $placeholder!=''?$placeholder:$label.'...';
 
 @endphp
-<x-lma-form-field :name="$name" :label="$label">
+<x-lma.form.field :name="$name" :label="$label">
     <ul class="inline-block max-w-60 border rounded max-h-96 p-2 overflow-auto">
         @foreach($params as $k=>$param)
             <li class="w-full flex border-b">
@@ -15,4 +15,4 @@
             </li>
         @endforeach
     </ul>
-</x-lma-form-field>
+</x-lma.form.field>

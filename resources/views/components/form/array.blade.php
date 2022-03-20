@@ -4,7 +4,7 @@ $label = $label!=""?$label:\Illuminate\Support\Str::title($name);
 $placeholder = $placeholder!=''?$placeholder:$label.'...';
 
 @endphp
-<x-lma-form-field :name="$name" :label="$label">
+<x-lma.form.field :name="$name" :label="$label">
 
     @if(empty($data))
         <input wire:model{{$mode}}="{{$name}}.0" type="{{$type}}" placeholder="{{$placeholder}}" {{$attributes}} class="w-full  p-1 px-2 text-sm @error($name) border-orange-500 text-orange-500 @enderror"/>
@@ -18,4 +18,4 @@ $placeholder = $placeholder!=''?$placeholder:$label.'...';
         @endforeach
             <input wire:model{{$mode}}="{{$name}}.{{max(array_keys($data))+1}}" type="{{$type}}" placeholder="{{$placeholder}}" {{$attributes}} class="w-full  p-1 px-2 text-sm @error($name) border-orange-500 text-orange-500 @enderror"/>
     @endif
-</x-lma-form-field>
+</x-lma.form.field>

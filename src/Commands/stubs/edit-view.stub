@@ -1,6 +1,6 @@
 <div class="w-full min-h-screen">
-    <x-lma-header-page group="DumMyTitle" page="Edit" />
-    <x-lma-box-edit listing="{{route('DumMyRoute')}}" show="{{route('DumMyRoute.show',['record_id'=>$record_id])}}">
+    <x-lma.header-page group="DumMyTitle" page="Edit" />
+    <x-lma.boxs.edit listing="{{route('DumMyRoute')}}" show="{{route('DumMyRoute.show',['record_id'=>$record_id])}}">
         DumMyContent
-    </x-lma-box-edit>
+    </x-lma.boxs.edit>
 </div>

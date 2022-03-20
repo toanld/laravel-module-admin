@@ -1,9 +1,9 @@
 <div class="w-full min-h-screen">
-    <x-lma-header-page group="Auth/Roles" page="Edit"/>
-    <x-lma-box-edit listing="{{route('admin.auth.roles')}}" show="{{route('admin.auth.roles.show',['record_id'=>$record_id])}}">
-        <x-lma-form-input type="text" name="name" label="Name"/>
-        <x-lma-form-input type="text" name="title" label="Title"/>
-        <x-lma-form-field name="permission_ids" label="Permissions">
+    <x-lma.header-page group="Auth/Roles" page="Edit"/>
+    <x-lma.box.edit listing="{{route('admin.auth.roles')}}" show="{{route('admin.auth.roles.show',['record_id'=>$record_id])}}">
+        <x-lma.form.input type="text" name="name" label="Name"/>
+        <x-lma.form.input type="text" name="title" label="Title"/>
+        <x-lma.form.field name="permission_ids" label="Permissions">
             <div class="w-full flex flex-wrap">
                 @foreach($permissions as $permission)
                     <div class="p-1 flex-auto">
@@ -25,7 +25,7 @@
 
                 @endforeach
             </div>
-        </x-lma-form-field>
+        </x-lma.form.field>
 
-    </x-lma-box-edit>
+    </x-lma.box.edit>
 </div>
