@@ -26,9 +26,9 @@ class ModelCommand extends Command
     protected function createModel()
     {
         $dumpFields = "";
-        $dumCastClass = "";
+        $dumCastClass = [];
         $dumCasts = "";
-        $dumpListFields ="\"id\"";
+        $dumpListFields = "\"id\"";
         foreach ($this->fields as $f => $row) {
             $dumpFields .= "\"$f\", ";
             $dumpListFields .= ", \"$f\"";
@@ -36,18 +36,24 @@ class ModelCommand extends Command
                 case "json":
                 case "array":
                 case "object":
-                    $dumCastClass .= "use App\Casts\JsonCast;\n";
+                    $dumCastClass["use App\Casts\JsonCast"] = "use App\Casts\JsonCast;";
                     $dumCasts .= "\"$f\" => JsonCast::class,\r\n\t\t";
                     break;
                 case "text":
-                    $dumCasts .= "\"$f\" => \"string\",\r\n\t\t";
+                    $dumCastClass["use App\Casts\StringCast"] = "use App\Casts\StringCast;";
+                    $dumCasts .= "\"$f\" => StringCast::class,\r\n\t\t";
                     break;
                 case "textarea":
-                    $dumCastClass .= "use App\Casts\HtmlCast;\n";
+                    $dumCastClass["use App\Casts\HtmlCast"] = "use App\Casts\HtmlCast;";
                     $dumCasts .= "\"$f\" => HtmlCast::class,\r\n\t\t";
                     break;
                 case "number":
-                    $dumCasts .= "\"$f\" => \"integer\",\r\n\t\t";
+                    $dumCastClass["use App\Casts\IntegerCast"] = "use App\Casts\IntegerCast;";
+                    $dumCasts .= "\"$f\" => IntegerCast::class,\r\n\t\t";
+                    break;
+                case "boolean":
+                    $dumCastClass["use App\Casts\BooleanCast"] = "use App\Casts\BooleanCast;";
+                    $dumCasts .= "\"$f\" => BooleanCast::class,\r\n\t\t";
                     break;
                 default:
                     $dumCasts .= "\"$f\" => \"$row->type\",\r\n\t\t";
@@ -66,7 +72,7 @@ class ModelCommand extends Command
                 'DumMyCasts'
             ],
             [
-                $dumCastClass,
+                implode("\n", $dumCastClass),
                 $this->argument("name"),
                 $dumpFields,
                 $dumpListFields,
