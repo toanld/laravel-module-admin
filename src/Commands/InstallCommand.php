@@ -23,12 +23,17 @@ class InstallCommand extends Command
     public function handle()
     {
         $this->info('lma:install command');
+        $this->info('Install admin to module: ' . config("lma.module.name"));
+        $comfirm = $this->ask('Please enter Y to continue, any key to quit');
+        if ($comfirm != "Y") {
+            return false;
+        }
         $this->moduleName = config("lma.module.name");
         if (!$this->initModule()) {
             $this->error("Module not found: $this->moduleName");
         }
-         $this->copyAssets();
-         $this->copyProvider();
+        $this->copyAssets();
+        $this->copyProvider();
         $this->copyView();
         $this->installAuthModule('Auth', 'Index');
 
@@ -109,7 +114,8 @@ class InstallCommand extends Command
         }
     }
 
-    protected function installPackageJson(){
+    protected function installPackageJson()
+    {
 
     }
 
@@ -147,7 +153,7 @@ class InstallCommand extends Command
             [
                 config("lma.module.prefix"),
                 config("lma.module.route"),
-                Str::studly(config('lma.module.name'))."Controller",
+                Str::studly(config('lma.module.name')) . "Controller",
                 config("lma.module.namespace")
 
             ], $stub);
@@ -208,23 +214,25 @@ class InstallCommand extends Command
         File::put($pathSave, $stub);
     }
 
-    protected function createAdminusers(){
+    protected function createAdminusers()
+    {
         $listSuper = explode(",", env('APP_SUPER_ADMIN'));
         $users = User::find($listSuper);
-        if($users){
-            $users->map(function ($user){
-                $user->update(["is_admin"=>1]);
+        if ($users) {
+            $users->map(function ($user) {
+                $user->update(["is_admin" => 1]);
             });
-        }else{
+        } else {
             $this->line("Create new admin");
         }
 
     }
 
-    protected function publishModuleProvider(){
+    protected function publishModuleProvider()
+    {
         $moduleName = Str::studly(config("lma.module.name"));
         $stub = $this->getStub("ModuleServiceProvider.stub");
-        $pathSave = module_path(config('lma.module.name'), "Providers/".$moduleName."ServiceProvider.php");
+        $pathSave = module_path(config('lma.module.name'), "Providers/" . $moduleName . "ServiceProvider.php");
         $stub = str_replace([
             'DumpMyNamespace',
             'DumMyModuleName',
