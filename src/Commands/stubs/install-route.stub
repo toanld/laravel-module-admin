@@ -41,4 +41,6 @@ Route::prefix('DumMyModulePrefix')->name('DumMyRouteName')->middleware(['auth:sa
             Route::get('/edit/{record_id}', DumMyNamespace\Http\Livewire\Auth\AdminMenus\Edit::class)->name('.edit')->can('admin-menus.edit');
         });
     });
+
+    //** Add New Routes **//
 });

@@ -54,6 +54,7 @@ class InstallCommand extends Command
         $this->installAuthModule('Auth/Roles', 'Listing');
 
         $this->publishLayout();
+        $this->publishModuleProvider();
         $this->publishRoute();
 
         // make default permission
@@ -218,5 +219,38 @@ class InstallCommand extends Command
             $this->line("Create new admin");
         }
 
+    }
+
+    protected function publishModuleProvider(){
+        $moduleName = Str::studly(config("lma.module.name"));
+        $stub = $this->getStub("ModuleServiceProvider.stub");
+        $pathSave = module_path(config('lma.module.name'), "Providers/".$moduleName."ServiceProvider.php");
+        $stub = str_replace([
+            'DumpMyNamespace',
+            'DumMyModuleName',
+            'DumMyModuleLower',
+            'DumMyComponent',
+        ],
+            [
+                config("lma.module.namespace"),
+                $moduleName,
+                config("lma.module.name"),
+                config("lma.module.component"),
+
+            ], $stub);
+        File::put($pathSave, $stub);
+
+        $stub = $this->getStub("RouteServiceProvider.stub");
+        $pathSave = module_path(config('lma.module.name'), "Providers/RouteServiceProvider.php");
+        $stub = str_replace([
+            'DumMyNamespace',
+            'DumMyModuleName',
+        ],
+            [
+                config("lma.module.namespace"),
+                $moduleName,
+
+            ], $stub);
+        File::put($pathSave, $stub);
     }
 }

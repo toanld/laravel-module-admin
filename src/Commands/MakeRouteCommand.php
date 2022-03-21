@@ -20,7 +20,7 @@ class MakeRouteCommand extends Command
 
 
         $this->info($this->description);
-        $this->folder =  $this->argument('name');
+        $this->folder = $this->argument('name');
         $this->showRoute();
     }
 
@@ -39,8 +39,22 @@ class MakeRouteCommand extends Command
 
             ],
             $stub);
-        $this->comment('Add the following route to: ' . module_path(config('lma.module.name', 'Route/web.php')));
+
+        $this->comment('Add the following route to: ' . module_path(config('lma.module.name'), 'Route/web.php'));
         $this->line('');
         $this->line($template);
+        $this->installRoute($template);
     }
+
+    protected function installRoute($routes)
+    {
+        if (!Str::contains($appRoutes = file_get_contents(module_path(config('lma.module.name'), 'Routes/web.php')), $routes)) {
+            file_put_contents(module_path(config('lma.module.name'), 'Routes/web.php'), str_replace(
+                '//** Add New Routes **//',
+                $routes . PHP_EOL . '//** Add New Routes **//',
+                $appRoutes
+            ));
+        }
+    }
+
 }
