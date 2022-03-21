@@ -19,16 +19,9 @@
         <div class="w-full max-w-screen-lg ">{{$slot}}</div>
     </div>
     <div class="w-full border-t p-2">
-        <div class="w-full max-w-screen-lg flex items-center">
+        <div class="w-full max-w-screen-lg flex items-center lg:pl-[15%]">
             <label class="btn-primary mr-2" wire:click="update">Update</label>
-            <div class="flex-auto ">
-
-            </div>
             <div class="flex-none grid grid-flow-col gap-4 text-xs">
-                <label class=" flex  items-center">
-                    <input type="radio" wire:model="done" value="0">
-                    <span class="ml-1">Continue Create</span>
-                </label>
                 <label class="flex items-center">
                     <input type="radio" wire:model="done" value="1">
                     <span class="ml-1">View</span>
@@ -38,6 +31,7 @@
                     <span class="ml-1">Listing</span>
                 </label>
             </div>
+            <div class="flex-auto "></div>
             <label class="btn ml-2" wire:click="resetForm">Reset</label>
         </div>
     </div>
