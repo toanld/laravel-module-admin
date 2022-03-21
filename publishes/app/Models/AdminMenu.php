@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Casts\IntegerCast;
+use App\Casts\StringCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,12 +37,11 @@ class AdminMenu extends Model
     }
 
     protected $casts = [
-        "name" => "string",
-        "parent_id" => "integer",
-        "sort" => "integer",
-        "icon" => "string",
-        "route" => "string",
-        "permission" => "string",
+        "name" => StringCast::class,
+        "parent_id" => IntegerCast::class,
+        "sort" => IntegerCast::class,
+        "icon" => StringCast::class,
+        "route" => StringCast::class
 
     ];
 }

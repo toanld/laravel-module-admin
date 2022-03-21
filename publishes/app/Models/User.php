@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Casts\BooleanCast;
+use App\Casts\StringCast;
 use Hungnm28\LaravelModuleAdmin\Traits\HasPermissionsTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,6 +21,7 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
 
     use HasPermissionsTrait;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -30,7 +33,7 @@ class User extends Authenticatable
         'is_admin',
         'password',
     ];
-    public static $listFields = ["name","email","is_admin","password"];
+    public static $listFields = ["name", "email", "is_admin", "password"];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -50,6 +53,9 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        "email" => StringCast::class
+        , "name" => StringCast::class
+        , "is_admin" => BooleanCast::class
     ];
 
     /**
@@ -60,4 +66,5 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
 }

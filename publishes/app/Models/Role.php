@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\StringCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,4 +33,9 @@ class Role extends Model
         return $this->belongsToMany(User::class, 'users_roles');
 
     }
+
+    protected $casts = [
+        "name" => StringCast::class
+        , "title" => StringCast::class
+    ];
 }

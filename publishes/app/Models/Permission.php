@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Casts\IntegerCast;
+use App\Casts\StringCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -42,4 +44,10 @@ class Permission extends Model
         return $this->belongsToMany(User::class, 'users_roles');
 
     }
+
+    protected $casts = [
+        "name" => StringCast::class
+        , "title" => StringCast::class
+        , "parent_id" => IntegerCast::class
+    ];
 }
