@@ -6,6 +6,7 @@ module.exports = {
         '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         '../../vendor/laravel/jetstream/**/*.blade.php',
         '../../vendor/hungnm28/laravel-module-admin/resources/views/components/*.blade.php',
+        '../../vendor/hungnm28/laravel-module-admin/resources/views/components/**/*.blade.php',
         '../../storage/framework/views/*.php',
         './Resources/views/livewire/**/*.blade.php',
         './Resources/views/**/*.blade.php',
@@ -53,5 +54,5 @@ module.exports = {
         }
     },
 
-    plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography'),require('@tailwindcss/line-clamp'),require('@tailwindcss/aspect-ratio')],
+    plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 };

@@ -10,13 +10,11 @@ Install:
 
 ```sh
 composer require hungnm28/laravel-module-admin
-npm install -D @tailwindcss/aspect-ratio
-npm install -D @tailwindcss/line-clamp
 ```
 Create module admin by [Laravel Module](https://nwidart.com/laravel-modules/v6/basic-usage/creating-a-module)
 
 Config module componet conponent at `Modules/<your module name>/providers/<Module Name>ServiceProvider.php`
-```file
+```php
 +  use Illuminate\Support\Facades\Blade;
  ...
  $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
