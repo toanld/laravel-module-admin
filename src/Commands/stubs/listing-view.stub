@@ -3,7 +3,7 @@
     <x-lma.box.listing :fields="$fields" class="min-h-screen" permission="DumMyPermission" create="{{route('DumMyRoute.create')}}">
         <x-slot name="filter">
             <div class="w-full max-w-screen-lg">
-                <x-lma.form.input type="text" name="fid" label="Id" placeholder="Id..."/>
+                <x-lma.form.input type="text" name="fid" label="Id" placeholder="Id..." />
             </div>
         </x-slot>
         <table class="w-full">
@@ -25,12 +25,12 @@
                     @if(data_get($fields,'updated_at'))<td>{{$row->updated_at}}</td> @endif
                     <td>
                         <div class="flex flex-row justify-end space-x-1">
-                            <x-lma.btn.show href="{{route('admin.users.show',['record_id'=>$row->id])}}"></x-lma-btn-show>
+                            <x-lma.btn.show href="{{route('admin.users.show',['record_id'=>$row->id])}}" />
                             @can('DumMyPermission.edit')
-                                <x-lma.btn.edit href="{{route('admin.users.edit',['record_id'=>$row->id])}}"></x-lma-btn-edit>
+                                <x-lma.btn.edit href="{{route('admin.users.edit',['record_id'=>$row->id])}}" />
                             @endcan
                             @can("DumMyPermission.delete")
-                                <x-lma.btn.delete :record="$row->id" :confirm="$confirm"></x-lma-btn-delete>
+                                <x-lma.btn.delete :record="$row->id" :confirm="$confirm" />
                             @endcan
                         </div>
                     </td>
