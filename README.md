@@ -13,14 +13,6 @@ composer require hungnm28/laravel-module-admin
 ```
 Create module admin by [Laravel Module](https://nwidart.com/laravel-modules/v6/basic-usage/creating-a-module)
 
-Config module componet conponent at `Modules/<your module name>/providers/<Module Name>ServiceProvider.php`
-```php
-+  use Illuminate\Support\Facades\Blade;
- ...
- $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
-+ Blade::componentNamespace('Modules\\<Module Name>\\Views\\Components', '<component name>');
-```
-
 
 Edit config module at file: `config/lma.php`
 
