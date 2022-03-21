@@ -66,7 +66,7 @@ trait CommandTrait
 
     private function class_path($path)
     {
-        $path = module_path(config("lma.module.name"), "Http/livewire/$this->folder/$path");
+        $path = module_path(config("lma.module.name"), "Http/Livewire/$this->folder/$path");
         $this->checkFilePath($path);
         $this->ensureDirectoryExists($path);
         return $path;
