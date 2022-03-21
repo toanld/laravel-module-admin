@@ -21,15 +21,15 @@ class Listing extends Component
     public $confirm = 0;
 
      public function toggleField($id, $field)
-        {
-            $this->authorize("DumMyPermission.edit");
-            if (in_array($field,[DumMyToggleField]))
-                $data = DumMyModelName::findOrFail($id);
-            $data->update([
-                $field => !$data->$field
-            ]);
-            $this->dispatchBrowserEvent('success', 'DumMyModelName successfully updated.');
-        }
+    {
+        $this->authorize("DumMyPermission.edit");
+        if (in_array($field,[DumMyToggleField]))
+            $data = DumMyModelName::findOrFail($id);
+        $data->update([
+            $field => !$data->$field
+        ]);
+        $this->dispatchBrowserEvent('success', 'DumMyModelName successfully updated.');
+    }
 
     function delete(){
         $this->authorize("DumMyPermission.delete");

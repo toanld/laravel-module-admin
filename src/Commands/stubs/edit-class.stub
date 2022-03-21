@@ -17,15 +17,15 @@ class Edit extends Component
         ];
     }
 
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
-
     public function mount()
     {
         $data = DumMyModelName::findOrFail($this->record_id);
         DumMySetData
+    }
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
     }
 
     public function update()

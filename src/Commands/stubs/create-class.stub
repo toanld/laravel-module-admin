@@ -35,18 +35,16 @@ class Create extends Component
                           break;
                 case 1:   $this->redirect(route('DumMyRoute.show',['record_id'=>$data->id]));
                           break;
-                case 3:   $this->redirect(route('DumMyRoute.edit',['record_id'=>$data->id]));
+                case 2:   $this->redirect(route('DumMyRoute.edit',['record_id'=>$data->id]));
                           break;
                 default:  $this->redirect(route('DumMyRoute'));
             }
         }
    }
 
-
    public function resetForm(){
        $this->redirect(route('DumMyRoute.create'));
    }
-
 
     public function render()
     {

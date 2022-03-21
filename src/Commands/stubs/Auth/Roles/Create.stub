@@ -49,7 +49,7 @@ class Create extends Component
                 case 1:
                     $this->redirect(route('admin.auth.roles.show', ['record_id' => $data->id]));
                     break;
-                case 3:
+                case 2:
                     $this->redirect(route('admin.auth.roles.edit', ['record_id' => $data->id]));
                     break;
                 default:
