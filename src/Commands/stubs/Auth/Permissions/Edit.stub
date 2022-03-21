@@ -23,11 +23,6 @@ class Edit extends Component
         ];
     }
 
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
-
     public function mount()
     {
         $data = permission::with("roles")->findOrFail($this->record_id);
@@ -35,7 +30,11 @@ class Edit extends Component
         $this->title = $data->title;
         $this->parent_id = $data->parent_id;
         $this->role_ids = $data->roles->pluck("id");
+    }
 
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
     }
 
     public function update()

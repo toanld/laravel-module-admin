@@ -26,11 +26,6 @@ class Edit extends Component
         return $rules;
     }
 
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
-
     public function mount()
     {
         $data = User::with("roles")->findOrFail($this->record_id);
@@ -38,7 +33,11 @@ class Edit extends Component
         $this->email = $data->email;
         $this->is_admin = $data->is_admin;
         $this->role_ids = $data->roles->pluck("id");
+    }
 
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
     }
 
     public function update()

@@ -22,11 +22,6 @@ class Edit extends Component
         ];
     }
 
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
-
     public function mount()
     {
         $data = AdminMenu::with("roles")->findOrFail($this->record_id);
@@ -36,8 +31,13 @@ class Edit extends Component
         $this->icon = $data->icon;
         $this->route = $data->route;
         $this->permission = $data->permission;
-        $this->role_ids = $data->roles->pluck("title","id");
+        $this->role_ids = $data->roles->pluck("id");
 
+    }
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
     }
 
     public function update()
