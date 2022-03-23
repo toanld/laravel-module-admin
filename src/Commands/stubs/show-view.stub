@@ -1,10 +1,11 @@
 <div class="w-full min-h-screen">
     <x-lma.header-page group="DumMyTitle" page="Show" />
     <x-lma.box.show listing="{{route('DumMyRoute')}}" edit="{{route('DumMyRoute.edit',['record_id'=>$data->id])}}">
+        <table class="table max-w-screen-lg border">
         <tr><th class="text-right w-48 border-r">Id:</th><td>{{$data->id}}</td></tr>
         DumMyContent
         <tr><th class="text-right border-r">Created at:</th><td>{{$data->created_at}}</td></tr>
         <tr><th class="text-right border-r">Updated at:</th><td>{{$data->updated_at}}</td></tr>
-
+        </table>
     </x-lma.box.show>
 </div>

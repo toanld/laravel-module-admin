@@ -6,7 +6,7 @@
                 <x-lma.form.input type="text" name="fid" label="Id" placeholder="Id..."/>
             </div>
         </x-slot>
-        <table class="w-full">
+        <table class="table">
             <thead>
             <tr>
                 <th class="w-10">ID</th>

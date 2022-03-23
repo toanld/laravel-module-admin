@@ -16,9 +16,9 @@
         </div>
     </div>
     <div class="w-full flex p-2 py-5 justify-center">
-        <table class="w-full max-w-screen-lg border">
+
             {{$slot}}
-        </table>
+
 
     </div>
 </div>
