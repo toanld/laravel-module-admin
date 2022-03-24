@@ -47,6 +47,10 @@ class ModelCommand extends Command
                     $dumCastClass["use App\Casts\HtmlCast"] = "use App\Casts\HtmlCast;";
                     $dumCasts .= "\"$f\" => HtmlCast::class,\r\n\t\t";
                     break;
+                case "slug":
+                    $dumCastClass["use App\Casts\SlugCast"] = "use App\Casts\SlugCast;";
+                    $dumCasts .= "\"$f\" => SlugCast::class,\r\n\t\t";
+                    break;
                 case "number":
                     $dumCastClass["use App\Casts\IntegerCast"] = "use App\Casts\IntegerCast;";
                     $dumCasts .= "\"$f\" => IntegerCast::class,\r\n\t\t";

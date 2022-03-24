@@ -16,12 +16,14 @@ class ModelGenerator
         'color' => 'color|rgb',
         'image' => 'image|img|avatar|pic|picture|cover',
         'file' => 'file|attachment',
+        'slug' => 'slug',
     ];
     protected $fieldRulerMapping = [
         "name" => "string"
         , "email" => "email"
         , "password" => "required|min:8"
         , "url" => "url"
+        , "slug" => "required|string"
     ];
 
     private $doctrineTypeMapping = [
