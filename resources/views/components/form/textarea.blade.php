@@ -1,7 +1,7 @@
 @props(["name","label"=>null,'mode'=>'.debounce.300ms',"class"=>"",'type'=>'text','placeholder'=>null,'rows'=>5])
 @php
-    $label = $label!=""?$label:\Illuminate\Support\Str::title($name);
-    $placeholder = $placeholder!=''?$placeholder:$label.'...';
+    $placeholder = ($placeholder!=''?$placeholder:Illuminate\Support\Str::title($name)).'...';
+
 
 @endphp
 <x-lma.form.field :name="$name" :label="$label">

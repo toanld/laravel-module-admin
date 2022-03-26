@@ -1,16 +1,15 @@
 @props(["name","label"=>null,"class"=>"",'placeholder'=>null,'val'=>''])
 @php
-    $label = $label!=""?$label:\Illuminate\Support\Str::title($name);
-    $placeholder = $placeholder!=''?$placeholder:$label.'...';
-    $icons = [];
-    $path = public_path('assets/images/icons.svg');
-    if(file_exists($path)){
-            $str = file_get_contents($path);
-            $icons = [];
-            if (preg_match_all('/id=\"([a-z0-9-]*)\"/', $str, $arr)) {
-                $icons = $arr[1];
-            }
-    }
+    $placeholder = ($placeholder!=''?$placeholder:Illuminate\Support\Str::title($name)).'...';
+$icons = [];
+$path = public_path('assets/images/icons.svg');
+if(file_exists($path)){
+        $str = file_get_contents($path);
+        $icons = [];
+        if (preg_match_all('/id=\"([a-z0-9-]*)\"/', $str, $arr)) {
+            $icons = $arr[1];
+        }
+}
 @endphp
 <x-lma.form.field :name="$name" :label="$label">
     <div x-data="{open : false}" class="w-full relative">
