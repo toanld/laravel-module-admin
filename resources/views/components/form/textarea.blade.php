@@ -1,6 +1,6 @@
 @props(["name","label"=>null,'mode'=>'.debounce.300ms',"class"=>"",'type'=>'text','placeholder'=>null,'rows'=>5])
 @php
-    $placeholder = ($placeholder!=''?$placeholder:Illuminate\Support\Str::title($name)).'...';
+    $placeholder = ($placeholder!=''?$placeholder:Illuminate\Support\Str::headline($name)).'...';
 
 
 @endphp

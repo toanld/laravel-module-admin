@@ -1,6 +1,6 @@
 @props(["name","label"=>null,"class"=>"",'value'=>1])
 @php
-$label = $label!=""?$label:\Illuminate\Support\Str::title($name);
+$label = $label!=""?$label:\Illuminate\Support\Str::headline($name);
 
 @endphp
 <x-lma.form.field :name="$name" :label="$label">

@@ -1,6 +1,6 @@
 @props(["name","label"=>null,"class"=>"",'placeholder'=>null,'val'=>''])
 @php
-    $placeholder = ($placeholder!=''?$placeholder:Illuminate\Support\Str::title($name)).'...';
+    $placeholder = ($placeholder!=''?$placeholder:Illuminate\Support\Str::headline($name)).'...';
 $icons = [];
 $path = public_path('assets/images/icons.svg');
 if(file_exists($path)){

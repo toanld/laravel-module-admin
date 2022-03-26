@@ -1,6 +1,6 @@
 @props(["name","label"=>null,"class"=>"",'placeholder'=>null,"default"=>[],"params"=>[],"vals"=>[]])
 @php
-    $placeholder = ($placeholder!=''?$placeholder:Illuminate\Support\Str::title($name)).'...';
+    $placeholder = ($placeholder!=''?$placeholder:Illuminate\Support\Str::headline($name)).'...';
 
 
 @endphp
