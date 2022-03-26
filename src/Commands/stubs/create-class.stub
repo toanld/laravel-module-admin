@@ -3,6 +3,7 @@
 namespace DumMyNamespace;
 
 use DumMyModelClass;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class Create extends Component
@@ -13,17 +14,21 @@ class Create extends Component
     protected $rules = [
         DumMyRules
     ];
+
+    public function mount(){
+
+    }
+
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);
     }
-    public function removeItem($val,$k){
-        if(isset($this->$val) && isset($this->$val[$k])){
-            unset($this->$val[$k]);
-            $this->$val = array_values($this->$val);
-        }
+
+    public function updatedSlug(){
+        $this->slug = Str::slug($this->slug);
     }
-   public function store(){
+
+    public function store(){
         $this->validate();
         $data = DumMyModelName::create([
             DumMyFormFields
@@ -45,6 +50,26 @@ class Create extends Component
    public function resetForm(){
        $this->redirect(route('DumMyRoute.create'));
    }
+
+   public function removeItem($val, $k)
+    {
+        if (isset($this->$val) && isset($this->$val[$k])) {
+            unset($this->$val[$k]);
+            $this->$val = array_values($this->$val);
+        }
+    }
+
+    private function getArrayParams($name)
+    {
+        $data = $this->$name;
+        foreach ($data as $k => $val) {
+            $val = trim($val);
+            if ($val == "") {
+                unset($data[$k]);
+            }
+        }
+        return array_values($data);
+    }
 
     public function render()
     {

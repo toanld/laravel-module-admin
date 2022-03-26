@@ -16,5 +16,5 @@
             </label>
         </div>
     @endforeach
-    <label class="btn-success  sm  float-right" wire:click="$set('{{$name}}.{{$k+1}}','')">{!! lmaIcon("add-circle") !!}</label>
+    <label class="btn-success  sm  float-right" wire:click="$set('{{$name}}.{{$k+1}}','')">{!! lmaIcon("add-circle",12) !!}</label>
 </x-lma.form.field>

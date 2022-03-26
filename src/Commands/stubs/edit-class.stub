@@ -3,6 +3,7 @@
 namespace DumMyNamespace;
 
 use DumMyModelClass;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class Edit extends Component
@@ -28,6 +29,10 @@ class Edit extends Component
         $this->validateOnly($propertyName);
     }
 
+    public function updatedSlug(){
+        $this->slug = Str::slug($this->slug);
+    }
+
     public function update()
     {
         $this->validate();
@@ -47,11 +52,24 @@ class Edit extends Component
         }
     }
 
-    public function removeItem($val,$k){
-        if(isset($this->$val) && isset($this->$val[$k])){
+    public function removeItem($val, $k)
+    {
+        if (isset($this->$val) && isset($this->$val[$k])) {
             unset($this->$val[$k]);
             $this->$val = array_values($this->$val);
         }
+    }
+
+    private function getArrayParams($name)
+    {
+        $data = $this->$name;
+        foreach ($data as $k => $val) {
+            $val = trim($val);
+            if ($val == "") {
+                unset($data[$k]);
+            }
+        }
+        return array_values($data);
     }
 
     public function render()

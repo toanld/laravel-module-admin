@@ -42,7 +42,7 @@ class MakeCreateCommand extends Command
         foreach ($this->fields as $f => $row) {
             $dumpFields .= $this->generateField($row);
             $dumpRules .= "'$f' => '$row->rule', \r\n\t\t";
-            $dumpFormField .= "'$f' => " . '$this->' . $f . ", \r\n\t\t\t";
+            $dumpFormField .=  $this->generateFormField($row) . "\r\n\t\t\t";
         }
         $dumpFields = rtrim($dumpFields, ", ");
         $route = config('lma.module.route') . "." . $this->getFonderDot();
@@ -95,6 +95,17 @@ class MakeCreateCommand extends Command
         return File::put($pathSave, $stub);
     }
 
+    private function generateFormField($item){
+        switch ($item->type) {
+            case "json":
+            case "array":
+            case "object":
+            return  "'$item->name' => " . '$this->getArrayParams(\'' . $item->name . "'),";
+            default:
+                return  "'$item->name' => " . '$this->' . $item->name . ",";
+        }
+    }
+
     private function generateField($item)
     {
         switch ($item->type) {
@@ -103,7 +114,7 @@ class MakeCreateCommand extends Command
             case "json":
             case "array":
             case "object":
-                return "$" . $item->name . "= [], ";
+                return "$" . $item->name . "= [''], ";
             case "text":
             case "textarea":
             case "number":
@@ -123,6 +134,8 @@ class MakeCreateCommand extends Command
                 return '<x-lma.form.textarea name="' . $item->name . '" label="' . $item->label . '" />';
             case 'boolean':
                 return '<x-lma.form.toggle name="' . $item->name . '" label="' . $item->label . '" />';
+            case 'slug':
+                return '<x-lma.form.input mode=".debounce.900ms" type="text" name="' . $item->name . '" label="' . $item->label . '" />';
             case 'json':
             case 'array':
             case 'object':
