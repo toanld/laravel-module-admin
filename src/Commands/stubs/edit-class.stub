@@ -52,24 +52,34 @@ class Edit extends Component
         }
     }
 
+    public function addItem($name,$param)
+    {
+       $param = trim($param);
+       if($param=='') return false;
+       if(isset($this->$name)){
+           $data = $this->$name;
+           $data[] = $param;
+           $this->$name = array_keys(array_flip($data));
+       }
+    }
     public function removeItem($val, $k)
     {
-        if (isset($this->$val) && isset($this->$val[$k])) {
-            unset($this->$val[$k]);
-            $this->$val = array_values($this->$val);
-        }
+       if (isset($this->$val) && isset($this->$val[$k])) {
+           unset($this->$val[$k]);
+           $this->$val = array_values($this->$val);
+       }
     }
 
     private function getArrayParams($name)
     {
-        $data = $this->$name;
-        foreach ($data as $k => $val) {
-            $val = trim($val);
-            if ($val == "") {
-                unset($data[$k]);
-            }
-        }
-        return array_values($data);
+       $data = $this->$name;
+       foreach ($data as $k => $val) {
+           $val = trim($val);
+           if ($val == "") {
+               unset($data[$k]);
+           }
+       }
+       return array_keys(array_flip($data));
     }
 
     public function render()

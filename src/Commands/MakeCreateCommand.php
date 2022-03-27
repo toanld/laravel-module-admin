@@ -114,7 +114,7 @@ class MakeCreateCommand extends Command
             case "json":
             case "array":
             case "object":
-                return "$" . $item->name . "= [''], ";
+                return "$" . $item->name . "= [], ";
             case "text":
             case "textarea":
             case "number":
