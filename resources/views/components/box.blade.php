@@ -3,7 +3,7 @@
     <div class="w-full flex items-center px-2 border-teal-700  border-t-4">
         {!! $header !!}
     </div>
-    <div class="w-full block p-2">
+    <div class="w-full block">
         {{$slot}}
     </div>
     {!! $footer !!}
