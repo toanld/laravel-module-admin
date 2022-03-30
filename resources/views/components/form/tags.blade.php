@@ -1,4 +1,4 @@
-@props(["name","data"=>[],"label"=>null,'mode'=>'.debounce.600ms',"class"=>"",'type'=>'text','placeholder'=>null])
+@props(["name","data"=>[],"label"=>null,'mode'=>'.debounce.600ms',"class"=>"",'type'=>'text','placeholder'=>null, 'suggestes'=>[]])
 @php
     $placeholder = ($placeholder!=''?$placeholder:Illuminate\Support\Str::headline($name)).'...';
 
@@ -16,7 +16,18 @@
             $wire.addItem('{{$name}}',this.param);
             this.param='';
         } }">
-        <input x-model="param" type="{{$type}}" @keyup.enter="addItem()"  placeholder="{{$placeholder}}" {{$attributes}} class="w-full flex-auto  p-1 px-2 text-sm @error($name) border-orange-500 text-orange-500 @enderror"/>
-        <label class="flex-none cursor-pointer w-8 flex items-center justify-center border-gray-700 border border-l-0 bg-green-600 text-white hover:bg-green-700" @click="addItem()">{!! lmaIcon("add-circle") !!}</label>
+        <div x-data="{ open: false }" class="w-full flex-1 relative" @click.outside="open = false">
+            <input @focus="open = !open" x-model="param" type="{{$type}}" @keyup.enter="addItem()" placeholder="{{$placeholder}}" {{$attributes}} class="w-full flex-auto  p-1 px-2 text-sm @error($name) border-orange-500 text-orange-500 @enderror"/>
+            @if($suggestes)
+                <div x-show="open" class="w-full block left-0 right-0 mt-0 bg-white border shadow rounded-b" style="">
+                    @foreach($suggestes as $sg)
+                        <label @click="open = false" class="w-full block border-b p-2 cursor-pointer" wire:click="addItem('{{$name}}','{{$sg}}')">{{$sg}}</label>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+        <div class="flex-none">
+            <label class="flex-none cursor-pointer w-8 py-2 flex items-center justify-center border-gray-700 border border-l-0 bg-green-600 text-white hover:bg-green-700" @click="addItem()">{!! lmaIcon("add-circle",12) !!}</label>
+        </div>
     </div>
 </x-lma.form.field>
