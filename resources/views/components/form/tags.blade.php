@@ -1,4 +1,4 @@
-@props(["name","data"=>[],"label"=>null,'mode'=>'.debounce.600ms',"class"=>"",'type'=>'text','placeholder'=>null, 'suggestes'=>[]])
+@props(["name","data"=>[],"label"=>null,'mode'=>'.debounce.600ms',"class"=>"",'type'=>'text','placeholder'=>null, 'suggest'=>[]])
 @php
     $placeholder = ($placeholder!=''?$placeholder:Illuminate\Support\Str::headline($name)).'...';
 
@@ -18,9 +18,9 @@
         } }">
         <div x-data="{ open: false }" class="w-full flex-1 relative" @click.outside="open = false">
             <input @focus="open = !open" x-model="param" type="{{$type}}" @keyup.enter="addItem()" placeholder="{{$placeholder}}" {{$attributes}} class="w-full flex-auto  p-1 px-2 text-sm @error($name) border-orange-500 text-orange-500 @enderror"/>
-            @if($suggestes)
+            @if($suggest)
                 <div x-show="open" class="w-full block left-0 right-0 mt-0 bg-white border shadow rounded-b" style="">
-                    @foreach($suggestes as $sg)
+                    @foreach($suggest as $sg)
                         <label @click="open = false" class="w-full block border-b p-2 cursor-pointer" wire:click="addItem('{{$name}}','{{$sg}}')">{{$sg}}</label>
                     @endforeach
                 </div>
