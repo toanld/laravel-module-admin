@@ -40,7 +40,7 @@
         <div id="adm-menu">
                <x-admin::navbar />
         </div>
-        <div class="w-full flex-auto p-4">
+        <div class="flex-1 p-4 overflow-hidden">
             {{$slot}}
 
         </div>
