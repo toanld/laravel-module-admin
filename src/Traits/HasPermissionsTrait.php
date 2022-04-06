@@ -86,6 +86,10 @@ trait HasPermissionsTrait
 
     public function hasRole(...$roles)
     {
+        // check super admins
+        if($this->isSuperAdmin()){
+            return true;
+        }
 
         foreach ($roles as $role) {
             if ($this->roles->contains('name', $role)) {

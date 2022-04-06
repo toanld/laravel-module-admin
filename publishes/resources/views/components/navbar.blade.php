@@ -1,16 +1,16 @@
 <ul id="menus">
     @if(Route::has(config('lma.module.route')))
-    <li class="item {{ request()->routeIs(config('lma.module.route')) ? 'active' : '' }}">
-        <a href="{{route(config('lma.module.route'))}}" class="link">{!! lmaIcon("home") !!}<span class="link-title">Home Admin</span></a>
-    </li>
+        <li class="item {{ request()->routeIs(config('lma.module.route')) ? 'active' : '' }}">
+            <a href="{{route(config('lma.module.route'))}}" class="link">{!! lmaIcon("home") !!}<span class="link-title">Home Admin</span></a>
+        </li>
     @endif
-    @foreach($data as $item)
-        @if(Route::has($item->route))
+    @foreach(data_get($data,"0",[]) as $item)
+        @if(Route::has($item->route) )
             <li class="item {{ request()->routeIs($item->route.'*') ? 'active' : '' }} ">
                 <a href="{{route($item->route)}}" class="link">{!! lmaIcon($item->icon) !!}<span class="link-title">{{$item->name}}</span></a>
-                @if($item->children)
+                @if(data_get($data,$item->id))
                     <ul class="children">
-                        @foreach($item->children as $child)
+                        @foreach(data_get($data,$item->id,[]) as $child)
                             @if(Route::has($child->route))
                                 <li class="child {{ request()->routeIs($child->route.'*') ? 'active' : '' }} ">
                                     <a class="link" href="{{route($child->route)}}">

@@ -10,10 +10,18 @@ class Navbar extends Component
 
     public function render()
     {
-        $data = AdminMenu::whereParentId(0)->with(["children"=>function($qr){
-             $qr->orderBy("sort");
-             return $qr;
-        }])->orderBy("sort")->get();
+        if(auth()->user()->isSuperAdmin()){
+           $role_ids = Role::all()->pluck("id");
+        }else{
+           $role_ids = auth()->user()->roles()->get()->pluck("id");
+        }
+
+        $data = AdminMenu::whereHas('roles',function ($qr) use ($role_ids){
+           $qr->whereIn("id",$role_ids);
+        })->orderBy("parent_id")->get()->reduce(function ($rt,$item){
+           $rt[$item->parent_id][] = $item;
+           return $rt;
+        },[]);
         return view("DumMyComponent::components.navbar",compact("data"));
     }
 }

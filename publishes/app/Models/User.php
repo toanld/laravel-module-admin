@@ -27,6 +27,8 @@ class User extends Authenticatable
      *
      * @var string[]
      */
+
+
     protected $fillable = [
         'name',
         'email',
@@ -34,6 +36,19 @@ class User extends Authenticatable
         'password',
     ];
     public static $listFields = ["name", "email", "is_admin", "password"];
+
+    /**
+     * Check super admin
+     *
+     * @return bool
+     */
+    public function isSuperAdmin()
+    {
+        $listSuper = env('APP_SUPER_ADMIN');
+        $listSuper = explode(",", $listSuper);
+        return in_array($this->id, $listSuper);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
