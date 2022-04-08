@@ -3,6 +3,7 @@
 namespace DumMyNamespace\Views\Components;
 
 use App\Models\AdminMenu;
+use App\Models\Role;
 use Illuminate\View\Component;
 
 class Navbar extends Component
