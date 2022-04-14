@@ -11,7 +11,7 @@ class MakeEditCommand extends Command
 {
     use CommandTrait;
 
-    protected $signature = 'lma:make-edit {name} {--model=}';
+    protected $signature = 'lma:make-edit {name} {--model=} {--force}';
 
     protected $description = 'Make edit';
 
@@ -36,6 +36,9 @@ class MakeEditCommand extends Command
     {
         $pathSave = $this->class_path("Edit.php");
         $stub = $this->getStub('edit-class.stub');
+        if(!$pathSave){
+            return false;
+        }
         $dumpFields = "";
         $dumpRules = "";
         $dumpFormField = "";
@@ -80,6 +83,9 @@ class MakeEditCommand extends Command
     {
         $stub = $this->getStub("edit-view.stub");
         $pathSave = $this->view_path("edit.blade.php");
+        if(!$pathSave){
+            return false;
+        }
         $route = config('lma.module.route') . "." . $this->getFonderDot();
         $content = '';
         foreach ($this->fields as $row) {
@@ -141,7 +147,7 @@ class MakeEditCommand extends Command
             case 'json':
             case 'array':
             case 'object':
-                return '<x-lma.form.array  name="' . $item->name . '" label="' . $item->label . '" :data="$' . $item->name . '"/>';
+                return '<x-lma.form.tags  name="' . $item->name . '" label="' . $item->label . '" :params="$' . $item->name . '"/>';
             default:
                 return '<x-lma.form.input type="' . $item->type . '" name="' . $item->name . '" label="' . $item->label . '" />';
         }

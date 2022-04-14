@@ -11,7 +11,7 @@ class MakeRouteCommand extends Command
 {
     use CommandTrait;
 
-    protected $signature = 'lma:make-route {name} ';
+    protected $signature = 'lma:make-route {name} {--force}';
 
     protected $description = 'Make Admin Route';
 

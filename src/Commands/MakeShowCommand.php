@@ -11,7 +11,7 @@ class MakeShowCommand extends Command
 {
     use CommandTrait;
 
-    protected $signature = 'lma:make-show {name} {--model=}';
+    protected $signature = 'lma:make-show {name} {--model=} {--force}';
 
     protected $description = 'Make show';
 
@@ -38,6 +38,9 @@ class MakeShowCommand extends Command
     {
         $pathSave = $this->class_path("Show.php");
         $stub = $this->getStub('show-class.stub');
+        if(!$pathSave){
+            return false;
+        }
 
         $stub = str_replace([
             'DumMyNamespace',
@@ -61,6 +64,9 @@ class MakeShowCommand extends Command
     {
         $stub = $this->getStub("show-view.stub");
         $pathSave = $this->view_path("show.blade.php");
+        if(!$pathSave){
+            return false;
+        }
         $route = config('lma.module.route') . "." . $this->getFonderDot();
         $content = "";
         foreach ($this->fields as $row) {

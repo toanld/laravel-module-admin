@@ -1,11 +1,11 @@
-@props(["name","data"=>[],"label"=>null,'mode'=>'.debounce.600ms',"class"=>"",'type'=>'text','placeholder'=>null, 'suggest'=>[]])
+@props(["name","params"=>[],"label"=>null,'mode'=>'.debounce.600ms',"class"=>"",'type'=>'text','placeholder'=>null, 'suggest'=>[]])
 @php
     $placeholder = ($placeholder!=''?$placeholder:Illuminate\Support\Str::headline($name)).'...';
 
 @endphp
 <x-lma.form.field :name="$name" :label="$label">
     <div class="w-full flex items-start flex-wrap">
-        @foreach($data as $k=>$value)
+        @foreach($params as $k=>$value)
             <span class="flex-none flex items-center m-1 bg-green-100 text-xs border-green-700 border">
                 <span class="flex-1 px-1">{{$value}}</span>
                 <span class="flex-none cursor-pointer" wire:click="removeItem('{{$name}}',{{$k}})">{!! lmaIcon("close") !!}</span>

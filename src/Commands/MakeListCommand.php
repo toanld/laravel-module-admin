@@ -11,7 +11,7 @@ class MakeListCommand extends Command
 {
     use CommandTrait;
 
-    protected $signature = 'lma:make-list {name} {--model=}';
+    protected $signature = 'lma:make-list {name} {--model=} {--force}';
 
     protected $description = 'Make list';
 
@@ -38,6 +38,9 @@ class MakeListCommand extends Command
     {
         $pathSave = $this->class_path("Listing.php");
         $stub = $this->getStub('listing-class.stub');
+        if(!$pathSave){
+            return false;
+        }
         $dumpFields = "";
         $dumToggleField = "";
         foreach ($this->fields as $f => $v) {
@@ -76,6 +79,9 @@ class MakeListCommand extends Command
     {
         $stub = $this->getStub("listing-view.stub");
         $pathSave = $this->view_path("listing.blade.php");
+        if(!$pathSave){
+            return false;
+        }
         $route = config('lma.module.route') . "." . $this->getFonderDot();
         $tHead = "";
         $content = "";

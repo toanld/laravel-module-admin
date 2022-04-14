@@ -11,7 +11,7 @@ class MakeCreateCommand extends Command
 {
     use CommandTrait;
 
-    protected $signature = 'lma:make-create {name} {--model=}';
+    protected $signature = 'lma:make-create {name} {--model=} {--force}';
 
     protected $description = 'Make create';
 
@@ -35,6 +35,9 @@ class MakeCreateCommand extends Command
     private function makeClass()
     {
         $pathSave = $this->class_path("Create.php");
+        if(!$pathSave){
+            return false;
+        }
         $stub = $this->getStub('create-class.stub');
         $dumpFields = "";
         $dumpRules = "";
@@ -76,6 +79,9 @@ class MakeCreateCommand extends Command
     {
         $stub = $this->getStub("create-view.stub");
         $pathSave = $this->view_path("create.blade.php");
+        if(!$pathSave){
+            return false;
+        }
         $route = config('lma.module.route') . "." . $this->getFonderDot();
         $content = '';
         foreach ($this->fields as $row) {
@@ -139,7 +145,7 @@ class MakeCreateCommand extends Command
             case 'json':
             case 'array':
             case 'object':
-                return '<x-lma.form.array  name="' . $item->name . '" label="' . $item->label . '" :data="$' . $item->name . '"/>';
+                return '<x-lma.form.tags  name="' . $item->name . '" label="' . $item->label . '" :params="$' . $item->name . '"/>';
             default:
                 return '<x-lma.form.input type="' . $item->type . '" name="' . $item->name . '" label="' . $item->label . '" />';
         }

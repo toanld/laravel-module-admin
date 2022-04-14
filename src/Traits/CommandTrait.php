@@ -35,9 +35,9 @@ trait CommandTrait
 
     private function checkFilePath($path)
     {
-        if (File::exists($path)) {
-            $this->line(" WHOOPS-IE-TOOTLES </> 😳 \n");
-            $this->line("Class already exists:</> $path \n ");
+        if (File::exists($path) && ! $this->isForce()) {
+            $this->error(" WHOOPS-IE-TOOTLES </> 😳 \n");
+            $this->error("File already exists:</> $path \n ");
             return false;
             // unlink($path);
         }
@@ -59,7 +59,9 @@ trait CommandTrait
     {
         $view_folder = $this->getViewFolder();
         $path = module_path(config("lma.module.name"), "Resources/views/livewire/$view_folder/$path");
-        $this->checkFilePath($path);
+        if(!$this->checkFilePath($path)){
+            return false;
+        }
         $this->ensureDirectoryExists($path);
         return $path;
     }
@@ -67,7 +69,9 @@ trait CommandTrait
     private function class_path($path)
     {
         $path = module_path(config("lma.module.name"), "Http/Livewire/$this->folder/$path");
-        $this->checkFilePath($path);
+        if(!$this->checkFilePath($path)){
+            return false;
+        }
         $this->ensureDirectoryExists($path);
         return $path;
     }
@@ -118,5 +122,9 @@ trait CommandTrait
             $name .= "." . Str::kebab($type);
         }
         return $name;
+    }
+    protected function isForce()
+    {
+        return $this->option('force') === true;
     }
 }
