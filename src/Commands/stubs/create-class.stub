@@ -4,6 +4,7 @@ namespace DumMyNamespace;
 
 use DumMyModelClass;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
 class Create extends Component
