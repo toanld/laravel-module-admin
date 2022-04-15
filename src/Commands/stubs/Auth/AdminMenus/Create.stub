@@ -53,7 +53,7 @@ class Create extends Component
     {
         $roles = Role::get()->pluck("title", "id");
         $parents = AdminMenu::whereParentId(0)->pluck("name", "id");
-        $max = AdminMenu::whereParentId($this->parent_id)->max("sort");
+        $max = AdminMenu::whereParentId(intval($this->parent_id))->count();
         $sorts = [];
         for($i=0;$i<=$max+1;$i++){
             $sorts[$i] = $i;
