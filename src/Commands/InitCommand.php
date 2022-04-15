@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 class InitCommand extends Command
 {
 
-    protected $signature = 'lma:init';
+    protected $signature = 'lma:init {--force}';
 
     protected $description = 'Make admin page';
 

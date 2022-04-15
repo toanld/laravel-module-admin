@@ -13,7 +13,7 @@ class InstallCommand extends Command
 {
     use CommandTrait;
 
-    protected $signature = 'lma:install';
+    protected $signature = 'lma:install {--force}';
 
     protected $description = 'Make admin page';
 
@@ -126,6 +126,9 @@ class InstallCommand extends Command
         $this->folder = Str::studly($folder);
         $stub = $this->getStub("$name/$method.stub");
         $pathSave = $this->class_path(Str::studly($method) . ".php");
+        if(!$pathSave){
+            return false;
+        }
         $stub = str_replace([
             'DumMyNamespace',
             'DumMyComponent'

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\File;
 class MakeLayoutCommand extends Command
 {
     use CommandTrait;
-    protected $signature = 'lma:make-layout';
+    protected $signature = 'lma:make-layout {--force}';
 
     protected $description = 'Make admin layout';
 

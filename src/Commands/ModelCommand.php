@@ -11,7 +11,7 @@ class ModelCommand extends Command
 
     use CommandTrait;
 
-    protected $signature = 'lma:model {name}';
+    protected $signature = 'lma:model {name} {--force}';
 
     protected $description = 'Make model page';
 

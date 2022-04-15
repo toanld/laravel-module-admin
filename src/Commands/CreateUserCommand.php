@@ -11,7 +11,7 @@ class CreateUserCommand extends Command
 {
 
 
-    protected $signature = 'lma:create-admin';
+    protected $signature = 'lma:create-admin {--force}';
 
     protected $description = 'Create Admin User';
 
