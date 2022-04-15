@@ -82,7 +82,7 @@ class Create extends Component
         for($i=0;$i<=$max+1;$i++){
             $sorts[$i] = $i;
         }
-        return view('DumMyComponent::livewire.auth.admin-menus.create',compact("roles","parents","sorts"))
+        return view('DumMyComponent::livewire.auth.admin-menus.create',compact("roles","parents","sorts","routes"))
             ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Adminmenus Create']);
     }
 }
