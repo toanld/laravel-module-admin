@@ -4,6 +4,7 @@ namespace DumMyNamespace\Http\Livewire\Auth\AdminMenus;
 
 use App\Models\AdminMenu;
 use App\Models\Role;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class Create extends Component
@@ -51,6 +52,29 @@ class Create extends Component
    }
     public function render()
     {
+        $routes = [];
+        $prefix = config("lma.module.prefix");
+        foreach (Route::getRoutes()->getRoutes() as $route){
+            $name = data_get($route->getAction(),"as");
+            if(strpos(" ".$name,$prefix)){
+                $name = Str::beforeLast($name,".create");
+                $name = Str::beforeLast($name,".show");
+                $name = Str::beforeLast($name,".edit");
+                $name = trim($name);
+                if($name != $prefix){
+                    $routes[$name]  = $name;
+                }
+            }
+        }
+        $menus = AdminMenu::get()->reduce(function ($rt,$item){
+            $rt[$item->route] = $item;
+            return $rt;
+        },[]);
+        foreach($routes as $k => $route){
+            if(isset($menus[$k])){
+                unset($routes[$k]);
+            }
+        }
         $roles = Role::get()->pluck("title", "id");
         $parents = AdminMenu::whereParentId(0)->pluck("name", "id");
         $max = AdminMenu::whereParentId(intval($this->parent_id))->count();
