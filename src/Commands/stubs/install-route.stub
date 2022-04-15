@@ -40,6 +40,7 @@ Route::prefix('DumMyModulePrefix')->name('DumMyRouteName')->middleware(['auth:sa
             Route::get('/{record_id}', DumMyNamespace\Http\Livewire\Auth\AdminMenus\Show::class)->name('.show')->can('admin-menus');
             Route::get('/edit/{record_id}', DumMyNamespace\Http\Livewire\Auth\AdminMenus\Edit::class)->name('.edit')->can('admin-menus.edit');
         });
+        //** Add To auth Routes **//
     });
 
     //** Add New Routes **//

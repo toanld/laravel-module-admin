@@ -11,7 +11,7 @@ class MakeListCommand extends Command
 {
     use CommandTrait;
 
-    protected $signature = 'lma:make-list {name} {--model=} {--force}';
+    protected $signature = 'lma:make-list {name} {--model=} {--force} {--parent=}';
 
     protected $description = 'Make list';
 
@@ -50,7 +50,6 @@ class MakeListCommand extends Command
             }
         }
         $dumToggleField = trim($dumToggleField, ', ');
-        $dumpPermission = $this->getPermissionName();
         $stub = str_replace([
             'DumMyNamespace',
             'DumMyModelClass',
@@ -65,7 +64,7 @@ class MakeListCommand extends Command
             "App\Models\\$this->model",
             $dumpFields,
             $this->model,
-            $dumpPermission,
+            $this->getPermissionName(),
             $dumToggleField,
             $this->getFonderDot(),
             Str::headline(Str::replace("/", " ", $this->folder))
@@ -82,7 +81,7 @@ class MakeListCommand extends Command
         if(!$pathSave){
             return false;
         }
-        $route = config('lma.module.route') . "." . $this->getFonderDot();
+        $route = config('lma.module.route') . "." . $this->getPermissionName();
         $tHead = "";
         $content = "";
         foreach ($this->fields as $row) {

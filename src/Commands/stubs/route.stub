@@ -1,6 +1,6 @@
     Route::prefix('DumMyModule')->name('.DumMyModule')->group(function () {
         Route::get('/', DumMyNamespace\Listing::class)->can('DumMyModule');
-        Route::get('/{record_id}', DumMyNamespace\Show::class)->name('.show')->can('DumMyModule');
-        Route::get('/create', DumMyNamespace\Create::class)->name('.create')->can('DumMyModule.create');
-        Route::get('/edit/{record_id}', DumMyNamespace\Edit::class)->name('.edit')->can('DumMyModule');
+        Route::get('/{record_id}', DumMyNamespace\Show::class)->name('.show')->can('DumMyPermission');
+        Route::get('/create', DumMyNamespace\Create::class)->name('.create')->can('DumMyPermission.create');
+        Route::get('/edit/{record_id}', DumMyNamespace\Edit::class)->name('.edit')->can('DumMyPermission');
     });

@@ -11,7 +11,7 @@ class MakeRouteCommand extends Command
 {
     use CommandTrait;
 
-    protected $signature = 'lma:make-route {name} {--force}';
+    protected $signature = 'lma:make-route {name} {--force}  {--parent=}';
 
     protected $description = 'Make Admin Route';
 
@@ -32,11 +32,12 @@ class MakeRouteCommand extends Command
             [
                 'DumMyModule',
                 'DumMyNamespace'
+                ,'DumMyPermission'
             ],
             [
                 $this->getFonderDot(),
                 $this->getNamespace()
-
+                , $this->getPermissionName()
             ],
             $stub);
 
@@ -48,10 +49,17 @@ class MakeRouteCommand extends Command
 
     protected function installRoute($routes)
     {
+        $flag = '//** Add New Routes **//';
+        $parent = $this->option("parent");
+        if ($parent) {
+            $flag = '//** Add To ' . $parent . ' Routes **//';
+        }
+
+
         if (!Str::contains($appRoutes = file_get_contents(module_path(config('lma.module.name'), 'Routes/web.php')), $routes)) {
             file_put_contents(module_path(config('lma.module.name'), 'Routes/web.php'), str_replace(
-                '//** Add New Routes **//',
-                $routes . PHP_EOL . '//** Add New Routes **//',
+                $flag,
+                $routes . PHP_EOL . $flag,
                 $appRoutes
             ));
         }

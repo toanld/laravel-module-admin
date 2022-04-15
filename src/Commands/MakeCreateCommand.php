@@ -11,7 +11,7 @@ class MakeCreateCommand extends Command
 {
     use CommandTrait;
 
-    protected $signature = 'lma:make-create {name} {--model=} {--force}';
+    protected $signature = 'lma:make-create {name} {--model=} {--force} {--parent=}';
 
     protected $description = 'Make create';
 
@@ -48,7 +48,7 @@ class MakeCreateCommand extends Command
             $dumpFormField .=  $this->generateFormField($row) . "\r\n\t\t\t";
         }
         $dumpFields = rtrim($dumpFields, ", ");
-        $route = config('lma.module.route') . "." . $this->getFonderDot();
+        $route = config('lma.module.route') . "." . $this->getPermissionName();
         $stub = str_replace([
             'DumMyNamespace',
             'DumMyModelClass',
@@ -82,7 +82,7 @@ class MakeCreateCommand extends Command
         if(!$pathSave){
             return false;
         }
-        $route = config('lma.module.route') . "." . $this->getFonderDot();
+        $route = config('lma.module.route') . "." . $this->getPermissionName();
         $content = '';
         foreach ($this->fields as $row) {
             $content .= $this->generateView($row) . "\r\n\t\t";

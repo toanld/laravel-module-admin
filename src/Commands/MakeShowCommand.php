@@ -11,7 +11,7 @@ class MakeShowCommand extends Command
 {
     use CommandTrait;
 
-    protected $signature = 'lma:make-show {name} {--model=} {--force}';
+    protected $signature = 'lma:make-show {name} {--model=} {--force} {--parent=}';
 
     protected $description = 'Make show';
 
@@ -67,7 +67,7 @@ class MakeShowCommand extends Command
         if(!$pathSave){
             return false;
         }
-        $route = config('lma.module.route') . "." . $this->getFonderDot();
+        $route = config('lma.module.route') . "." . $this->getPermissionName();
         $content = "";
         foreach ($this->fields as $row) {
             $content .= $this->generateView($row) . "\r\n\t\t";

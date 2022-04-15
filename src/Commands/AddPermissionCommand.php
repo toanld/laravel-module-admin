@@ -12,7 +12,7 @@ class AddPermissionCommand extends Command
 {
     use CommandTrait;
 
-    protected $signature = 'lma:add-permission {name} {--force}';
+    protected $signature = 'lma:add-permission {name} {--force} {--parent=}';
 
     protected $description = 'Add permission';
 

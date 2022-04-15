@@ -11,7 +11,7 @@ class MakeEditCommand extends Command
 {
     use CommandTrait;
 
-    protected $signature = 'lma:make-edit {name} {--model=} {--force}';
+    protected $signature = 'lma:make-edit {name} {--model=} {--force} {--parent=}';
 
     protected $description = 'Make edit';
 
@@ -50,7 +50,7 @@ class MakeEditCommand extends Command
             $dumDataSet .= '$this->'.$f. ' = $data->'.$f . "; \r\n\t\t";
         }
         $dumpFields = rtrim($dumpFields, ", ");
-        $route = config('lma.module.route') . "." . $this->getFonderDot();
+        $route = config('lma.module.route') . "." . $this->getPermissionName();
         $stub = str_replace([
             'DumMyNamespace',
             'DumMyModelClass',
@@ -86,7 +86,7 @@ class MakeEditCommand extends Command
         if(!$pathSave){
             return false;
         }
-        $route = config('lma.module.route') . "." . $this->getFonderDot();
+        $route = config('lma.module.route') . "." . $this->getPermissionName();
         $content = '';
         foreach ($this->fields as $row) {
             $content .= $this->generateView($row) . "\r\n\t\t";

@@ -103,9 +103,13 @@ trait CommandTrait
         return Str::replace("/", "\\", config("lma.module.namespace") . "\Http\Livewire\\$this->folder");
     }
 
-    private function getFonderDot()
+    private function getFonderDot($prefix="")
     {
-        return Str::replace("/", ".", $this->getViewFolder());
+        $str = Str::replace("/", ".", $this->getViewFolder());
+        if($prefix !=""){
+            $str = "$prefix.$str";
+        }
+        return $str;
     }
 
     private function getHeadline()
@@ -115,9 +119,7 @@ trait CommandTrait
 
     private function getPermissionName($type = "")
     {
-        $name = basename($this->folder);
-        $name = Str::kebab($name);
-        $name = Str::plural($name);
+        $name = $this->getFonderDot($this->option("parent"));
         if ($type) {
             $name .= "." . Str::kebab($type);
         }
