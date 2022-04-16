@@ -49,6 +49,7 @@ class LaravelModuleAdminServiceProvider extends ServiceProvider
     protected function configureComponents()
     {
         $this->registerComponent('form.field');
+        $this->registerComponent('form.color');
         $this->registerComponent('form.input');
         $this->registerComponent('form.textarea');
         $this->registerComponent('form.toggle');
