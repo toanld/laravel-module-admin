@@ -125,6 +125,8 @@ class MakeEditCommand extends Command
             case "array":
             case "object":
                 return "$" . $item->name . "= [], ";
+            case "image":
+                return "$" . $item->name . ", $" . $item->name . "_field, $" . $item->name . "_url, ";
             case "text":
             case "textarea":
             case "number":
@@ -142,6 +144,8 @@ class MakeEditCommand extends Command
         switch ($item->type) {
             case 'textarea':
                 return '<x-lma.form.textarea name="' . $item->name . '" label="' . $item->label . '" />';
+            case 'image':
+                return '<x-lma.form.image name="' . $item->name . '_field" label="' . $item->label . '" :url="$'.$item->name.'_url" />';
             case 'boolean':
                 return '<x-lma.form.toggle name="' . $item->name . '" label="' . $item->label . '" />';
             case 'slug':

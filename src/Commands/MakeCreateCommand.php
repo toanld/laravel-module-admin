@@ -35,7 +35,7 @@ class MakeCreateCommand extends Command
     private function makeClass()
     {
         $pathSave = $this->class_path("Create.php");
-        if(!$pathSave){
+        if (!$pathSave) {
             return false;
         }
         $stub = $this->getStub('create-class.stub');
@@ -45,7 +45,7 @@ class MakeCreateCommand extends Command
         foreach ($this->fields as $f => $row) {
             $dumpFields .= $this->generateField($row);
             $dumpRules .= "'$f' => '$row->rule', \r\n\t\t";
-            $dumpFormField .=  $this->generateFormField($row) . "\r\n\t\t\t";
+            $dumpFormField .= $this->generateFormField($row) . "\r\n\t\t\t";
         }
         $dumpFields = rtrim($dumpFields, ", ");
         $route = config('lma.module.route') . "." . $this->getPermissionName();
@@ -70,7 +70,7 @@ class MakeCreateCommand extends Command
             $route,
             $this->getFonderDot(),
             $this->getPermissionName('create'),
-            Str::headline(Str::replace("/"," ",$this->folder))
+            Str::headline(Str::replace("/", " ", $this->folder))
         ], $stub);
 
 
@@ -81,7 +81,7 @@ class MakeCreateCommand extends Command
     {
         $stub = $this->getStub("create-view.stub");
         $pathSave = $this->view_path("create.blade.php");
-        if(!$pathSave){
+        if (!$pathSave) {
             return false;
         }
         $route = config('lma.module.route') . "." . $this->getPermissionName();
@@ -103,14 +103,15 @@ class MakeCreateCommand extends Command
         return File::put($pathSave, $stub);
     }
 
-    private function generateFormField($item){
+    private function generateFormField($item)
+    {
         switch ($item->type) {
             case "json":
             case "array":
             case "object":
-            return  "'$item->name' => " . '$this->getArrayParams(\'' . $item->name . "'),";
+                return "'$item->name' => " . '$this->getArrayParams(\'' . $item->name . "'),";
             default:
-                return  "'$item->name' => " . '$this->' . $item->name . ",";
+                return "'$item->name' => " . '$this->' . $item->name . ",";
         }
     }
 
@@ -123,6 +124,8 @@ class MakeCreateCommand extends Command
             case "array":
             case "object":
                 return "$" . $item->name . "= [], ";
+            case "image":
+                return "$" . $item->name . ", $" . $item->name . "_field, $" . $item->name . "_url, ";
             case "text":
             case "textarea":
             case "number":
@@ -140,6 +143,8 @@ class MakeCreateCommand extends Command
         switch ($item->type) {
             case 'textarea':
                 return '<x-lma.form.textarea name="' . $item->name . '" label="' . $item->label . '" />';
+            case 'image':
+                return '<x-lma.form.image name="' . $item->name . '_field" label="' . $item->label . '" :url="$' . $item->name . '_url" />';
             case 'boolean':
                 return '<x-lma.form.toggle name="' . $item->name . '" label="' . $item->label . '" />';
             case 'slug':

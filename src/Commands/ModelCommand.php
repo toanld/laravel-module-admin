@@ -39,6 +39,7 @@ class ModelCommand extends Command
                     $dumCastClass["use App\Casts\JsonCast"] = "use App\Casts\JsonCast;";
                     $dumCasts .= "\"$f\" => JsonCast::class,\r\n\t\t";
                     break;
+                case "image":
                 case "text":
                     $dumCastClass["use App\Casts\StringCast"] = "use App\Casts\StringCast;";
                     $dumCasts .= "\"$f\" => StringCast::class,\r\n\t\t";
