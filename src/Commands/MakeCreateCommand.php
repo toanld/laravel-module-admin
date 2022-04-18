@@ -58,6 +58,7 @@ class MakeCreateCommand extends Command
             'DumMyFormFields',
             'DumMyRoute',
             'DumMyViewFolder',
+            'DumMyPermission',
             'DumMyTitle'
         ], [
             $this->getNamespace(),
@@ -68,6 +69,7 @@ class MakeCreateCommand extends Command
             $dumpFormField,
             $route,
             $this->getFonderDot(),
+            $this->getPermissionName('create'),
             Str::headline(Str::replace("/"," ",$this->folder))
         ], $stub);
 

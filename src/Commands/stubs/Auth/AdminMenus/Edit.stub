@@ -4,12 +4,14 @@ namespace DumMyNamespace\Http\Livewire\Auth\AdminMenus;
 
 use App\Models\AdminMenu;
 use App\Models\Role;
+use Hungnm28\LaravelModuleAdmin\Traits\WithAdminTrait;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class Edit extends Component
 {
-    public $record_id;
-    public $done = 3;
+    use WithAdminTrait;
+    use AuthorizesRequests;
     public $name = '', $parent_id, $sort, $icon = '', $route = '', $role_ids = [];
 
     protected function rules()
@@ -32,12 +34,7 @@ class Edit extends Component
         $this->route = $data->route;
         $this->permission = $data->permission;
         $this->role_ids = $data->roles->pluck("id");
-
-    }
-
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
+        $this->done=3;
     }
 
     public function update()
@@ -57,16 +54,7 @@ class Edit extends Component
         }
         $data->resetRoles($this->role_ids);
         session()->flash('success', 'AdminMenu successfully updated.');
-        switch ($this->done) {
-            case 0:
-                $this->redirect(route('admin.auth.admin-menus.create'));
-                break;
-            case 1:
-                $this->redirect(route('admin.auth.admin-menus.show', ['record_id' => $data->id]));
-                break;
-            default:
-                $this->redirect(route('admin.auth.admin-menus'));
-        }
+        $this->redirectForm("admin.auth.admin-menus",$data->id);
     }
     public function render()
     {

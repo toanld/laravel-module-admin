@@ -3,13 +3,15 @@
 namespace DumMyNamespace;
 
 use DumMyModelClass;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
+use Hungnm28\LaravelModuleAdmin\Traits\WithAdminTrait;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Create extends Component
 {
-
+    use WithAdminTrait;
+    use AuthorizesRequests;
     public $done=0;
     public DumMyListFields;
     protected $rules = [
@@ -20,65 +22,20 @@ class Create extends Component
 
     }
 
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
-
-    public function updatedSlug(){
-        $this->slug = Str::slug($this->slug);
-    }
-
     public function store(){
+        $this->authorize("DumMyPermission");
         $this->validate();
         $data = DumMyModelName::create([
             DumMyFormFields
         ]);
         if($data){
             session()->flash('success', 'DumMyModelName successfully created.');
-            switch ($this->done){
-                case 0:   $this->redirect(route('DumMyRoute.create'));
-                          break;
-                case 1:   $this->redirect(route('DumMyRoute.show',['record_id'=>$data->id]));
-                          break;
-                case 2:   $this->redirect(route('DumMyRoute.edit',['record_id'=>$data->id]));
-                          break;
-                default:  $this->redirect(route('DumMyRoute'));
-            }
+            $this->redirectForm('DumMyRoute',$data->id);
         }
    }
 
    public function resetForm(){
        $this->redirect(route('DumMyRoute.create'));
-   }
-
-   public function addItem($name,$param){
-       $param = trim($param);
-       if($param=='') return false;
-       if(isset($this->$name)){
-           $data = $this->$name;
-           $data[] = $param;
-           $this->$name = array_keys(array_flip($data));
-       }
-   }
-   public function removeItem($val, $k)
-   {
-       if (isset($this->$val) && isset($this->$val[$k])) {
-           unset($this->$val[$k]);
-           $this->$val = array_values($this->$val);
-       }
-   }
-
-   private function getArrayParams($name)
-   {
-       $data = $this->$name;
-       foreach ($data as $k => $val) {
-           $val = trim($val);
-           if ($val == "") {
-               unset($data[$k]);
-           }
-       }
-       return array_keys(array_flip($data));
    }
 
     public function render()

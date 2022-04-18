@@ -4,12 +4,15 @@ namespace DumMyNamespace\Http\Livewire\Auth\Permissions;
 
 use App\Models\permission;
 use App\Models\Role;
+use Hungnm28\LaravelModuleAdmin\Traits\WithAdminTrait;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
 class CreateGroup extends Component
 {
-    public $done = 0;
+    use WithAdminTrait;
+    use AuthorizesRequests;
     public $name, $title, $create = 1, $edit = 1, $delete = 1, $view_roles = [], $create_roles = [], $edit_roles = [], $delete_roles = [];
     protected $rules = [
         'name' => 'string|unique:permissions,name',
@@ -20,11 +23,6 @@ class CreateGroup extends Component
         'delete_roles' => 'array',
 
     ];
-
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
 
     public function updatedName()
     {
@@ -38,6 +36,7 @@ class CreateGroup extends Component
 
     public function store()
     {
+        $this->authorize("auth.permissions.create");
         $this->validate();
         $data = permission::create([
             'name' => $this->name,
@@ -91,7 +90,7 @@ class CreateGroup extends Component
             session()->flash('success', 'permission successfully created.');
             switch ($this->done) {
                 case 0:
-                    $this->redirect(route('admin.auth.permissions.create'));
+                    $this->redirect(route('admin.auth.permissions.create-group'));
                     break;
                 case 1:
                     $this->redirect(route('admin.auth.permissions.show', ['record_id' => $data->id]));
@@ -104,13 +103,6 @@ class CreateGroup extends Component
             }
         }
     }
-
-
-    public function resetForm()
-    {
-        $this->redirect(route('admin.auth.permissions.create'));
-    }
-
 
     public function render()
     {

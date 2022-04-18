@@ -16,7 +16,6 @@ class Show extends Component
     public function render()
     {
         $data = Role::with('permissions')->findOrFail($this->record_id);
-
         return view('DumMyComponent::livewire.auth.roles.show',compact('data'))
             ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Roles Show']);
     }

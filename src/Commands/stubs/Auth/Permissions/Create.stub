@@ -4,12 +4,16 @@ namespace DumMyNamespace\Http\Livewire\Auth\Permissions;
 
 use App\Models\permission;
 use App\Models\Role;
+use Hungnm28\LaravelModuleAdmin\Traits\WithAdminTrait;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class Create extends Component
 {
 
-    public $done = 0;
+    use WithAdminTrait;
+    use AuthorizesRequests;
+
     public $name, $title, $parent_id = 0, $role_ids = [];
     protected $rules = [
         'name' => 'string|unique:permissions,name',
@@ -18,11 +22,6 @@ class Create extends Component
         'role_ids' => 'array',
 
     ];
-
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
 
     public function store()
     {
@@ -34,37 +33,20 @@ class Create extends Component
 
         ]);
         if ($data) {
-            if($data->parent_id !=0){
+            if ($data->parent_id != 0) {
                 $data->parent()->first()->addRoles(...$this->role_ids);
             }
             $data->resetRoles($this->role_ids);
             session()->flash('success', 'permission successfully created.');
-            switch ($this->done) {
-                case 0:
-                    $this->redirect(route('admin.auth.permissions.create'));
-                    break;
-                case 1:
-                    $this->redirect(route('admin.auth.permissions.show', ['record_id' => $data->id]));
-                    break;
-                case 2:
-                    $this->redirect(route('admin.auth.permissions.edit', ['record_id' => $data->id]));
-                    break;
-                default:
-                    $this->redirect(route('admin.auth.permissions'));
-            }
+            $this->redirectForm("admin.auth.permissions", $data->id);
         }
-    }
-
-    public function resetForm()
-    {
-        $this->redirect(route('admin.auth.permissions.create'));
     }
 
     public function render()
     {
         $roles = Role::get()->pluck("title", "id");
-        $parents = Permission::whereParentId(0)->get()->pluck("title","id");
-        return view('DumMyComponent::livewire.auth.permissions.create', compact("roles","parents"))
+        $parents = Permission::whereParentId(0)->get()->pluck("title", "id");
+        return view('DumMyComponent::livewire.auth.permissions.create', compact("roles", "parents"))
             ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Permissions Create']);
     }
 }

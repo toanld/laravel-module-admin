@@ -4,12 +4,15 @@ namespace DumMyNamespace\Http\Livewire\Auth\Admins;
 
 use App\Models\Role;
 use App\Models\User;
+use Hungnm28\LaravelModuleAdmin\Traits\WithAdminTrait;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class Create extends Component
 {
 
-    public $done = 0;
+   use WithAdminTrait;
+   use AuthorizesRequests;
     public $record_id , $role_ids = [],$user;
 
     protected $rules = [
@@ -18,10 +21,6 @@ class Create extends Component
 
     ];
 
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
     public function updatedRecordId(){
         $this->record_id = intval($this->record_id);
         if($this->record_id>0){
@@ -41,19 +40,7 @@ class Create extends Component
         $data->update(["is_admin" => 1]);
         $data->refreshRoleIds($this->role_ids);
         session()->flash('success', 'User successfully created.');
-        switch ($this->done) {
-            case 0:
-                $this->redirect(route('admin.auth.admins.create'));
-                break;
-            case 1:
-                $this->redirect(route('admin.auth.admins.show', ['record_id' => $data->id]));
-                break;
-            case 2:
-                $this->redirect(route('admin.auth.admins.edit', ['record_id' => $data->id]));
-                break;
-            default:
-                $this->redirect(route('admin.auth.admins'));
-        }
+        $this->redirectForm("admin.auth.admins",$data->id);
     }
 
     public function render()

@@ -18,7 +18,7 @@
         <label for="page-control" class="w-12 flex items-center justify-center border-green-700 border-r h-full text-white hover:bg-green-700 cursor-pointer">{!! lmaIcon('menu',24) !!}</label>
         <div class="flex-auto"></div>
         <div class="group w-12 flex-none border-green-700 border-l h-full relative">
-            <label class="w-12 h-12 flex items-center justify-center text-white cursor-pointer hover:bg-green-700 group-hover:bg-green-700">{!! lmaIcon('person',24) !!}</label>
+            <label class="w-full h-12 flex items-center justify-center text-white cursor-pointer hover:bg-green-700 group-hover:bg-green-700">{!! lmaIcon('person',24) !!}</label>
             <div class="w-64 absolute right-0 top-12 bg-white rounded-b shadow overflow-hidden hidden z-50 group-hover:block">
                 <div class="w-full h-32 bg-gray-500 flex flex-col items-center justify-center">
                     <div class="w-16 h-16 flex-none rounded-full bg-gray-300 flex items-center justify-center text-gray-700">

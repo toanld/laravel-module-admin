@@ -4,27 +4,25 @@ namespace DumMyNamespace\Http\Livewire\Auth\Roles;
 
 use App\Models\Permission;
 use App\Models\Role;
+use Hungnm28\LaravelModuleAdmin\Traits\WithAdminTrait;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 
 class Create extends Component
 {
 
-    public $done = 0;
+    use WithAdminTrait;
+    use AuthorizesRequests;
     public $name = '', $title = '', $permission_ids = [];
     protected $rules = [
         'name' => 'string|unique:roles,name',
         'title' => 'string',
-
     ];
-
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
 
     public function store()
     {
+        $this->authorize("auth.roles");
         $this->validate();
         $data = Role::create([
             'name' => $this->name,
@@ -42,28 +40,9 @@ class Create extends Component
             $data->resetPermissions(array_values($listPermission));
 
             session()->flash('success', 'Role successfully created.');
-            switch ($this->done) {
-                case 0:
-                    $this->redirect(route('admin.auth.roles.create'));
-                    break;
-                case 1:
-                    $this->redirect(route('admin.auth.roles.show', ['record_id' => $data->id]));
-                    break;
-                case 2:
-                    $this->redirect(route('admin.auth.roles.edit', ['record_id' => $data->id]));
-                    break;
-                default:
-                    $this->redirect(route('admin.auth.roles'));
-            }
+            $this->redirectForm("admin.auth.roles",$data->id);
         }
     }
-
-
-    public function resetForm()
-    {
-        $this->redirect(route('admin.auth.roles.create'));
-    }
-
 
     public function render()
     {

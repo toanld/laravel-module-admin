@@ -61,6 +61,7 @@ class MakeEditCommand extends Command
             'DumMyFormFields',
             'DumMyRoute',
             'DumMyViewFolder',
+            'DumMyPermission',
             'DumMyTitle'
         ], [
             $this->getNamespace(),
@@ -72,6 +73,7 @@ class MakeEditCommand extends Command
             $dumpFormField,
             $route,
             $this->getFonderDot(),
+            $this->getPermissionName("edit"),
             Str::headline(Str::replace("/"," ",$this->folder))
         ], $stub);
 

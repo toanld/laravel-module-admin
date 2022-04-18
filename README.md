@@ -35,6 +35,18 @@ npm run dev
 
 ## Create Page
 ```sh
-    php artisan lma:page <Page Name> <Model Name>
+    php artisan lma:make-page {name} {--model=} {--force} {--m} {--p} {--r} {--mpr} {--parent=}
+```
+## Create Permission
+```shell
+php artisan lma:add-permission {name} {--force} {--parent=}
+```
+## Create Route
+```shell
+php artisan lma:make-route {name} {--force}  {--parent=}
+```
+## Create Admin
+```shell
+php artisan lma:create-admin
 ```
 

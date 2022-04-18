@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 class MakePageCommand extends Command
 {
 
-    protected $signature = 'lma:make-page {name} {--model=} {--force} {--m} {--p} {--r} {--mpr} {--parent=}';
+    protected $signature = 'lma:make-page {name} {--model=} {--force} {--m} {--p} {--r} {--a} {--parent=}';
 
     protected $description = 'Make Admin Page';
 
@@ -36,13 +36,13 @@ class MakePageCommand extends Command
         $this->call('lma:make-create', ['name' => $name, '--model' => $modelName, '--force' => $this->isForce(),'--parent'=>$this->option("parent")]);
         $this->call('lma:make-edit', ['name' => $name, '--model' => $modelName, '--force' => $this->isForce(),'--parent'=>$this->option("parent")]);
         $this->call('lma:make-show', ['name' => $name, '--model' => $modelName, '--force' => $this->isForce(),'--parent'=>$this->option("parent")]);
-        if($this->option("m") || $this->option("mpr")){
+        if($this->option("m") || $this->option("a")){
             $this->call('lma:model', ['name' => $modelName]);
         }
-        if($this->option("p") || $this->option("mpr")){
+        if($this->option("p") || $this->option("a")){
             $this->call('lma:add-permission', ['name' => $name,'--parent'=>$this->option("parent")]);
         }
-        if($this->option("r") || $this->option("mpr")){
+        if($this->option("r") || $this->option("a")){
             $this->call('lma:make-route', ['name' => $name,'--parent'=>$this->option("parent")]);
         }
 

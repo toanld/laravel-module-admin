@@ -4,85 +4,52 @@ namespace DumMyNamespace\Http\Livewire\Auth\AdminMenus;
 
 use App\Models\AdminMenu;
 use App\Models\Role;
-use Illuminate\Support\Str;
+use Hungnm28\LaravelModuleAdmin\Traits\WithAdminTrait;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class Create extends Component
 {
 
-    public $done=0;
-    public $name='', $parent_id, $sort, $icon='', $route='', $role_ids=[];
+    use WithAdminTrait;
+    use AuthorizesRequests;
+
+    public $name = '', $parent_id, $sort, $icon = '', $route = '', $role_ids = [];
     protected $rules = [
         'name' => 'string',
-		'route' => 'string|unique:admin_menus,route',
-		'role_ids' => 'array',
+        'route' => 'string|unique:admin_menus,route',
+        'role_ids' => 'array',
 
     ];
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
 
-   public function store(){
+    public function store()
+    {
+        $this->authorize('auth.admin-menus.create');
         $this->validate();
         $data = AdminMenu::create([
             'name' => $this->name,
-			'parent_id' => $this->parent_id,
-			'sort' => $this->sort,
-			'icon' => $this->icon,
-			'route' => $this->route,
-
+            'parent_id' => $this->parent_id,
+            'sort' => $this->sort,
+            'icon' => $this->icon,
+            'route' => $this->route,
         ]);
-        if($data){
+        if ($data) {
             $data->resetRoles($this->role_ids);
             session()->flash('success', 'AdminMenu successfully created.');
-            switch ($this->done){
-                case 0:   $this->redirect(route('admin.auth.admin-menus.create'));
-                          break;
-                case 1:   $this->redirect(route('admin.auth.admin-menus.show',['record_id'=>$data->id]));
-                          break;
-                case 2:   $this->redirect(route('admin.auth.admin-menus.edit',['record_id'=>$data->id]));
-                          break;
-                default:  $this->redirect(route('admin.auth.admin-menus'));
-            }
+            $this->redirectForm("admin.auth.admin-menus", $data->id);
         }
-   }
-   public function resetForm(){
-       $this->redirect(route('admin.auth.admin-menus.create'));
-   }
+    }
+
     public function render()
     {
-        $routes = [];
-        $prefix = config("lma.module.prefix");
-        foreach (Route::getRoutes()->getRoutes() as $route){
-            $name = data_get($route->getAction(),"as");
-            if(strpos(" ".$name,$prefix)){
-                $name = Str::beforeLast($name,".create");
-                $name = Str::beforeLast($name,".show");
-                $name = Str::beforeLast($name,".edit");
-                $name = trim($name);
-                if($name != $prefix){
-                    $routes[$name]  = $name;
-                }
-            }
-        }
-        $menus = AdminMenu::get()->reduce(function ($rt,$item){
-            $rt[$item->route] = $item;
-            return $rt;
-        },[]);
-        foreach($routes as $k => $route){
-            if(isset($menus[$k])){
-                unset($routes[$k]);
-            }
-        }
         $roles = Role::get()->pluck("title", "id");
         $parents = AdminMenu::whereParentId(0)->pluck("name", "id");
         $max = AdminMenu::whereParentId(intval($this->parent_id))->count();
         $sorts = [];
-        for($i=0;$i<=$max+1;$i++){
+        for ($i = 0; $i <= $max + 1; $i++) {
             $sorts[$i] = $i;
         }
-        return view('DumMyComponent::livewire.auth.admin-menus.create',compact("roles","parents","sorts","routes"))
-            ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Adminmenus Create']);
+        return view('DumMyComponent::livewire.auth.admin-menus.create', compact("roles", "parents", "sorts"))
+            ->layout('DumMyComponent::layouts.master', ['title' => 'Auth Admin menus Create']);
     }
 }

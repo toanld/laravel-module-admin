@@ -4,12 +4,14 @@ namespace DumMyNamespace\Http\Livewire\Auth\Permissions;
 
 use App\Models\permission;
 use App\Models\Role;
+use Hungnm28\LaravelModuleAdmin\Traits\WithAdminTrait;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class Edit extends Component
 {
-    public $record_id;
-    public $done = 3;
+    use WithAdminTrait;
+    use AuthorizesRequests;
     public $name, $title, $parent_id = 0, $role_ids = [];
 
     protected function rules()
@@ -30,11 +32,7 @@ class Edit extends Component
         $this->title = $data->title;
         $this->parent_id = $data->parent_id;
         $this->role_ids = $data->roles->pluck("id");
-    }
-
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
+        $this->done = 3;
     }
 
     public function update()
@@ -54,17 +52,7 @@ class Edit extends Component
         }
         $data->resetRoles($this->role_ids);
         session()->flash('success', 'permission successfully updated.');
-        switch ($this->done) {
-            case 0:
-                $this->redirect(route('admin.auth.permissions.create'));
-                break;
-            case 1:
-                $this->redirect(route('admin.auth.permissions.show', ['record_id' => $data->id]));
-                break;
-            default:
-                $this->redirect(route('admin.auth.permissions'));
-                break;
-        }
+        $this->redirectForm("admin.auth.permissions",$data->id);
     }
 
 

@@ -18,6 +18,7 @@
                          selector: '#{{$name}}',
                          plugins: '{{$plugins}}',
                          toolbar: '{{$toolbar}}',
+                         image_title: true,
                          {{$upload_url?"images_upload_url:'".$upload_url."',":''}}
                           setup: function (editor) {
                              editor.on('init change', function () {
