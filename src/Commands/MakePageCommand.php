@@ -31,7 +31,7 @@ class MakePageCommand extends Command
         $this->model = $modelName;
 
         $this->info($this->description);
-
+        $this->call("migrate");
         $this->call('lma:make-list', ['name' => $name, '--model' => $modelName, '--force' => $this->isForce(),'--parent'=>$this->option("parent")]);
         $this->call('lma:make-create', ['name' => $name, '--model' => $modelName, '--force' => $this->isForce(),'--parent'=>$this->option("parent")]);
         $this->call('lma:make-edit', ['name' => $name, '--model' => $modelName, '--force' => $this->isForce(),'--parent'=>$this->option("parent")]);
