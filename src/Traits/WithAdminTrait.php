@@ -24,17 +24,19 @@ trait WithAdminTrait
      * @param $route
      * @param $id
      */
-    public function redirectForm($route, $id)
+    public function redirectForm($route, $id, $params = [])
     {
         switch ($this->done) {
             case 0:
-                $this->redirect(route("$route.create"));
+                $this->redirect(route("$route.create", $params));
                 break;
             case 1:
-                $this->redirect(route("$route.show", ['record_id' => $id]));
+                $params["record_id"] = $id;
+                $this->redirect(route("$route.show", $params));
                 break;
             case 2:
-                $this->redirect(route("$route.edit", ['record_id' => $id]));
+                $params["record_id"] = $id;
+                $this->redirect(route("$route.edit", $params));
                 break;
             default:
                 $this->redirect(route($route));
@@ -88,7 +90,8 @@ trait WithAdminTrait
     /**
      *
      */
-    public function resetForm(){
+    public function resetForm()
+    {
         $this->redirect(request()->header('Referer'));
     }
 }
