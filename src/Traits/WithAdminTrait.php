@@ -3,6 +3,8 @@
 namespace Hungnm28\LaravelModuleAdmin\Traits;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 trait WithAdminTrait
 {
@@ -54,20 +56,48 @@ trait WithAdminTrait
         if ($param == '') return false;
         if (isset($this->$name)) {
             $data = $this->$name;
+            Arr::add($data, $name, $param);
             $data[] = $param;
             $this->$name = array_keys(array_flip($data));
+        } else {
+            if (Str::contains($name, ".")) {
+                $this->addDotItem($name, $param);
+            }
         }
     }
 
-    /**
-     * @param $val
-     * @param $k
-     */
+    private function addDotItem($name, $param)
+    {
+        $arrDots = explode(".", $name);
+        $val = $arrDots[0];
+        $key = Str::after($name, $val . ".");
+        if (isset($this->$val)) {
+            $data = data_get($this->$val, $key);
+            $data[] = $param;
+            data_set($this->$val, $key, array_keys(array_flip($data)));
+        }
+    }
     public function removeItem($val, $k)
     {
         if (isset($this->$val) && isset($this->$val[$k])) {
             unset($this->$val[$k]);
             $this->$val = array_values($this->$val);
+        } else {
+            $this->removeDotItem($val, $k);
+        }
+    }
+    private function removeDotItem($name, $k)
+    {
+        $arrDots = explode(".", $name);
+        $val = $arrDots[0];
+        $key = Str::after($name, $val . ".");
+        if (isset($this->$val)) {
+            $data = data_get($this->$val, $key);
+            if (isset($data[$k])) {
+                unset($data[$k]);
+                $data = array_keys(array_flip($data));
+                data_set($this->$val, $key, $data);
+            }
         }
     }
 
