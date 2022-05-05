@@ -41,6 +41,7 @@ class ModelCommand extends Command
                     break;
                 case "image":
                 case "text":
+                case "url":
                     $dumCastClass["use App\Casts\StringCast"] = "use App\Casts\StringCast;";
                     $dumCasts .= "\"$f\" => StringCast::class,\r\n\t\t";
                     break;
