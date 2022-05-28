@@ -3,7 +3,7 @@
     $placeholder = ($placeholder!=''?$placeholder:Illuminate\Support\Str::headline($name)).'...';
 @endphp
 <x-lma.form.field :name="$name" :label="$label">
-    <div class="w-full flex flex-wrap space-x-2 md:pt-2">
+    <div class="w-full flex flex-wrap space-x-2 md:pt-1">
         @foreach($params as $k=>$val)
             <label class="flex-none flex items-center">
                 <input type="radio" wire:model="{{$name}}" value="{{$k}}">
