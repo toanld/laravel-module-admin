@@ -59,6 +59,7 @@ class LaravelModuleAdminServiceProvider extends ServiceProvider
         $this->registerComponent('form.select2-multi');
         $this->registerComponent('form.select-multi');
         $this->registerComponent('form.checkbox-multi');
+        $this->registerComponent('form.radio');
         $this->registerComponent('form.icon');
         $this->registerComponent('form.tags');
         $this->registerComponent('form.image');
