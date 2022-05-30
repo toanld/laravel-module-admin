@@ -3,7 +3,7 @@
     <div class="box-title">
         <span class="flex-none text-gray-800  text-xl p-2">{{$label}}</span>
         <div class="flex-none p-2 grid gap-1">
-          {!! $header !!}
+            {!! $header !!}
         </div>
     </div>
     <div class="box-container">
@@ -11,7 +11,9 @@
         <div class="form-field">
             <span class="table-cell"></span>
             <div class="footer">
-                {!! $footer !!}
+                <div class="w-full flex-none flex items-center border-t py-5">
+                    {!! $footer !!}
+                </div>
             </div>
         </div>
     </div>
