@@ -1,8 +1,10 @@
-@props(['header'=>'','label'=>'','footer'=>'','box'=>'full'])
+@props(['header'=>null,'label'=>'','footer'=>'','box'=>'full'])
 <div class="box-form {{$box}}">
-    <div class="w-full flex items-center px-2 border-teal-700  border-t-4">
-        <span class="text-teal-600 flex-none text-2xl font-bold">{{$label}}</span>
-        <div class="flex-auto">{!! $header !!}</div>
+    <div class="box-title">
+        <span class="flex-none text-gray-800  text-xl p-2">{{$label}}</span>
+        <div class="flex-none p-2 grid gap-1">
+          {!! $header !!}
+        </div>
     </div>
     <div class="box-container">
         {{$slot}}

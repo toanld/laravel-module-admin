@@ -1,7 +1,7 @@
 .box-form{
     @apply w-full bg-white rounded overflow-hidden text-sm shadow mx-auto;
     .box-title{
-        @apply w-full   border-teal-500  border-t-4;
+        @apply w-full   border-teal-500  border-t-4 border-b flex items-center justify-between;
     }
     .box-container{
         @apply w-full block p-2 pt-5;
@@ -13,7 +13,7 @@
             .field{
                 @apply w-full block  p-2;
                 .form-input{
-                    @apply w-full rounded text-sm;
+                    @apply w-full rounded text-sm border-gray-300;
                 }
 
             }
@@ -45,9 +45,6 @@
                 }
             }
         }
-    }
-    &.sm{
-        @apply max-w-screen-xl;
     }
     .footer{
         @apply w-full py-4 px-2;

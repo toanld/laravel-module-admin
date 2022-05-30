@@ -1,13 +1,11 @@
 @props(['listing'=>'','btns'=>null,"box"=>"full"])
 <div class="box-form {{$box}}">
     <div class="box-title">
-        <div class="w-full flex border-b items-center justify-between">
-            <span class="flex-none text-gray-800  text-xl p-2">Create</span>
-            <div class="flex-none p-2 grid gap-1">
-                @if($listing)
-                    <a class="btn-primary" href="{{$listing}}">{!! lmaIcon('list') !!}<span class="text">List</span></a>
-                @endif
-            </div>
+        <span class="flex-none text-gray-800  text-xl p-2">Create</span>
+        <div class="flex-none p-2 grid gap-1">
+            @if($listing)
+                <a class="btn-primary" href="{{$listing}}">{!! lmaIcon('list') !!}<span class="text">List</span></a>
+            @endif
         </div>
     </div>
     <div class="box-container">
