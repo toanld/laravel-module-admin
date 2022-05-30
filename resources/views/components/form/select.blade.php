@@ -7,7 +7,7 @@
  }
 @endphp
 <x-lma.form.field :name="$name" :label="$label">
-    <select wire:model="{{$name}}" placeholder="{{$placeholder}}" {{$attributes}} class="w-full  p-1 px-2 text-sm @error($name) border-orange-500 text-orange-500 @enderror">
+    <select wire:model="{{$name}}" placeholder="{{$placeholder}}" {{$attributes}} class="form-input">
         @foreach($default as $k=>$v)
             <option value="{{$k}}">{{$v}}</option>
         @endforeach

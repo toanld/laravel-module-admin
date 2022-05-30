@@ -17,7 +17,7 @@
             this.param='';
         } }">
         <div x-data="{ open: false }" class="w-full flex-1 relative" @click.outside="open = false">
-            <input @focus="open = !open" x-model="param" type="{{$type}}" @keyup.enter="addItem()" placeholder="{{$placeholder}}" {{$attributes}} class="w-full flex-auto  p-1 px-2 text-sm @error($name) border-orange-500 text-orange-500 @enderror"/>
+            <input @focus="open = !open" x-model="param" type="{{$type}}" @keyup.enter="addItem()" placeholder="{{$placeholder}}" {{$attributes}} class="form-input"/>
             @if($suggest)
                 <div x-show="open" class="w-full block left-0 right-0 mt-0 bg-white border shadow rounded-b" style="">
                     @foreach($suggest as $sg)
@@ -27,7 +27,7 @@
             @endif
         </div>
         <div class="flex-none">
-            <label class="flex-none cursor-pointer w-8 py-2 flex items-center justify-center border-gray-700 border border-l-0 bg-green-600 text-white hover:bg-green-700" @click="addItem()">{!! lmaIcon("add-circle",12) !!}</label>
+            <label class="flex-none rounded cursor-pointer w-10 py-3 ml-1 flex items-center justify-center border bg-green-600 text-white hover:bg-green-700" @click="addItem()">{!! lmaIcon("add-circle",12) !!}</label>
         </div>
     </div>
 </x-lma.form.field>

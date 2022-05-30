@@ -1,0 +1,56 @@
+.box-create{
+    @apply w-full bg-white rounded overflow-hidden text-sm shadow mx-auto;
+    .box-title{
+        @apply w-full   border-teal-500  border-t-4;
+    }
+    .box-container{
+        @apply w-full block p-2 pt-5;
+        .form-field{
+            @apply w-full block;
+            .label{
+                @apply block px-2 pt-2 text-xs font-bold  whitespace-nowrap align-top ;
+            }
+            .field{
+                @apply w-full block  p-2;
+                .form-input{
+                    @apply w-full rounded text-sm;
+                }
+
+            }
+            .message{
+                @apply hidden;
+            }
+            &.error{
+                @apply text-orange-500;
+                .form-input{
+                    @apply border-orange-500;
+                }
+                .message{
+                    @apply block text-sm ;
+                }
+            }
+        }
+
+    }
+    &.full{
+        .box-container{
+            @apply  md:table;
+            .form-field{
+                @apply md:table-row;
+                .label{
+                    @apply md:table-cell md:text-right;
+                }
+                .field{
+                    @apply md:table-cell;
+                }
+            }
+        }
+    }
+    &.sm{
+        @apply max-w-screen-xl;
+    }
+    .footer{
+        @apply w-full py-4 px-2;
+    }
+}
+

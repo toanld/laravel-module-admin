@@ -6,5 +6,5 @@
 @endphp
 <x-lma.form.field :name="$name" :label="$label">
     <textarea wire:model{{$mode}}="{{$name}}" placeholder="{{$placeholder}}"
-             {{$attributes}} rows="{{$rows}}" class="w-full  p-1 px-2 text-sm @error($name) border-orange-500 text-orange-500 @enderror"></textarea>
+             {{$attributes}} rows="{{$rows}}" class="form-input"></textarea>
 </x-lma.form.field>
