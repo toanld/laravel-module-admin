@@ -1,5 +1,5 @@
 @props(['listing'=>'','btns'=>null,"box"=>"full"])
-<div class="box-create {{$box}}">
+<div class="box-form {{$box}}">
     <div class="box-title">
         <div class="w-full flex border-b items-center justify-between">
             <span class="flex-none text-gray-800  text-xl p-2">Create</span>
