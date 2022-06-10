@@ -89,6 +89,8 @@ php artisan lma:make-page category --a
 
 npm install
 
+npm run dev
+
 cd Modules/Admin
 
 npm install
