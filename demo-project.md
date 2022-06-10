@@ -86,6 +86,9 @@ php artisan lma:make-page category --a
 ## Run mix 
 
 ```shell
+
+npm install
+
 cd Modules/Admin
 
 npm install
