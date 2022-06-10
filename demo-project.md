@@ -18,6 +18,8 @@ php artisan jetstream:install livewire
 ````
 
 ```sh
+composer require nwidart/laravel-modules
+
 composer require hungnm28/laravel-module-admin
 ```
 ### config laravel module
