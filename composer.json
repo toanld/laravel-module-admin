@@ -6,6 +6,7 @@
         "php": ">=7.4",
         "doctrine/dbal": ">=2.3.0",
         "nwidart/laravel-modules": ">=6.0",
+        "laravel/jetstream": "^2.8",
         "mhmiton/laravel-modules-livewire": ">=1.5"
     },
     "license": "MIT",
