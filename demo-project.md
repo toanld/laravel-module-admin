@@ -56,6 +56,14 @@ php artisan lma:install
 php artisan lma:create-admin
 ```
 
+### add to .env file
+
+```dotenv
+ASSET_URL=/dev
+ASSET_ICON=/assets
+APP_SUPER_ADMIN=1
+```
+
 ### Example create module Category
 
 create Model Category and migration 
@@ -73,4 +81,14 @@ php artisan migrate
 Create module category
 ```shell
 php artisan lma:make-page category --a
+```
+
+## Run mix 
+
+```shell
+cd Modules/Admin
+
+npm install
+
+npm run dev
 ```
